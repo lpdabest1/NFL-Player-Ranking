@@ -14,12 +14,17 @@ import numpy as np
 from mpl_toolkits import mplot3d
 #%matplotlib inline
 from io import BytesIO
+from prettytable import PrettyTable
+from texttable import Texttable
 
-import csv
-with open('NFL_Player_QB_Search.csv', 'r') as file_csv:
-    read = csv.reader(file_csv)
-    for i in read:
-        print(i)
+
+
+#import csv
+#with open('NFL_Player_QB_Search.csv', 'r') as file_csv:
+#    read = csv.reader(file_csv)
+#    for i in read:
+#        print(i)
+
 
 nfl_qb_data_season_2021 = pd.read_csv('NFL_Player_QB_Search.csv')  
 #print(nfl_qb_data_season_2021)
@@ -28,6 +33,30 @@ nfl_qb_data_season_2021 = pd.read_csv('NFL_Player_QB_Search.csv')
 #print(nfl_qb_data_season_2021.Player_Image)
 df = pd.DataFrame(nfl_qb_data_season_2021)
 #print(df)
+
+#Pretty Table Example
+'''df1 = df
+df1 = PrettyTable(df1)
+print(df1)
+'''
+
+#Pretty Table Import CSV Example
+from prettytable import from_csv
+    
+with open('NFL_Player_QB_Search.csv', 'r') as fp: 
+    x = from_csv(fp)
+    
+print(x)
+
+
+
+
+
+#Texttable Example
+#table = Texttable()
+#table.add_rows(x1)
+#print(table.draw())
+
 
 ''' Sorting dataframe for customization/user input'''
 players_sorted = sorted(df.Player.unique())
