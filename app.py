@@ -1,4 +1,5 @@
 #from pandas._config.config import reset_option
+import NFL_QB_Season_2021_Stats
 import requests
 from bs4 import BeautifulSoup as bs
 import time
@@ -24,6 +25,8 @@ from io import BytesIO
 #    read = csv.reader(file_csv)
 #    for i in read:
 #        print(i)
+
+NFL_QB_Season_2021_Stats.scraping_2021_QB_Stats()
 
 
 nfl_qb_data_season_2021 = pd.read_csv('NFL_Player_QB_Search_without_image.csv')  
@@ -158,15 +161,32 @@ if user_input in players_sorted:
 
 
 
-y = nfl_qb_data_season_2021
+#y = nfl_qb_data_season_2021
 
-x = nfl_qb_data_season_2021.Player_Image
+#x = nfl_qb_data_season_2021.Player_Image
 
-#Viewing Image
+nfl_qb_data_season_2021_image = pd.read_csv('NFL_Player_QB_Search.csv')  
+df1 = pd.DataFrame(nfl_qb_data_season_2021_image)
+
+y = df1
+
+x = nfl_qb_data_season_2021_image.Player_Image
+
+#Viewing Image (based on user input)
+user_input1 = input('Enter a player: ')
+if user_input1 in y.Player:
+    print('Matthew Stafford')
+    r = requests.get(y.Player_Image == user_input1)
+    img = Image.open(BytesIO(r.content))
+    img.show()
+
+
+
+#Viewing Image (All Players)
 #for i in x:
 #    r = requests.get(i)
 #    img = Image.open(BytesIO(r.content))
-    #img.show()
+#    img.show()
     
     #img = plt.savefig(i)
     #plt.show()
