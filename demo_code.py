@@ -193,7 +193,7 @@ y = df1
 
 x = nfl_qb_data_season_2021_image.Player_Image
 
-df_selected_team = df1[(df1.Player.isin(df1)) & (df1.Player_Image.isin(df1))]
+df_selected_team = df1[(df1.Player.isin(df1)) & (df1.Player_Image.isin(x))]
 
 #Viewing Image (based on user input)
 user_input1 = input('Enter a player: ')
