@@ -134,7 +134,7 @@ def get_qb_data(data, team):
     return np.asarray(data[data['Team'] == team])[0]
 
 
-# User Input for customized Radar Chart
+# ******************User Input for customized Radar Chart ****************************
 
 user_input_demo = input('Enter a Team: ')
 # Create figure
@@ -193,14 +193,16 @@ y = df1
 
 x = nfl_qb_data_season_2021_image.Player_Image
 
+df_selected_team = df1[(df1.Player.isin(df1)) & (df1.Player_Image.isin(df1))]
+
 #Viewing Image (based on user input)
-'''user_input1 = input('Enter a player: ')
-if user_input1 in y.Player:
-    print('Matthew Stafford')
-    r = requests.get(y.Player_Image == user_input1)
+user_input1 = input('Enter a player: ')
+if user_input1 in df_selected_team:
+    print('working...')
+    r = requests.get(df_selected_team['Player_Image'] == user_input1)
     img = Image.open(BytesIO(r.content))
     img.show()
-'''
+
 
 
 #Viewing Image (All Players)
