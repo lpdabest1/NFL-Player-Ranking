@@ -35,6 +35,8 @@ nfl_qb_data_season_2021 = pd.read_csv('NFL_Player_QB_Search_without_image.csv')
 #print(nfl_qb_data_season_2021.head())
 #print(nfl_qb_data_season_2021.Player_Image)
 df = pd.DataFrame(nfl_qb_data_season_2021)
+df.rename(columns={'Completion Percentage': 'Cmp%',
+'Passing Yards': 'Pass Yds', 'Passing Touchdowns':'Pass TD','Touchdown Percentage':'TD%','Interceptions':'INT'}, inplace= True)
 #print(df)
 
 #Pretty Table Example
@@ -63,8 +65,11 @@ print(df1)
 
 # Stat Categories
 # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
-stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
+#stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
+stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
+
 stats_data_categories = df[['Player','Team'] + stat_categories] 
+
 stats_data_categories.head()
 print(stats_data_categories.dtypes)
 
@@ -76,7 +81,7 @@ for i in stat_categories:
     stats_data_categories[i + ' Rank'] = stats_data_categories[i].rank(pct=True)
 
 # reverse the stats of ascension sort for interceptions stat category
-stats_data_categories['Interceptions Rank'] = (1 - stats_data_categories['Interceptions Rank'])
+stats_data_categories['INT Rank'] = (1 - stats_data_categories['INT Rank'])
 
 # Viewing our updated stats DataFrame
 print(stats_data_categories.head)
@@ -129,6 +134,22 @@ def get_qb_data(data, team):
     return np.asarray(data[data['Team'] == team])[0]
 
 
+# User Input for customized Radar Chart
+
+user_input_demo = input('Enter a Team: ')
+# Create figure
+fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
+ax1_demo = fig.add_subplot(221, projection='polar', facecolor='#ededed')
+plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
+lar_data_demo = get_qb_data(stats_data_categories, user_input_demo)# Plot QB data
+ax1 = create_radar_chart(ax1_demo, angles, lar_data_demo, team_colors[user_input_demo])
+plt.show()
+
+
+
+
+
+
 # NFC West
 # Create figure
 fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
@@ -173,13 +194,13 @@ y = df1
 x = nfl_qb_data_season_2021_image.Player_Image
 
 #Viewing Image (based on user input)
-user_input1 = input('Enter a player: ')
+'''user_input1 = input('Enter a player: ')
 if user_input1 in y.Player:
     print('Matthew Stafford')
     r = requests.get(y.Player_Image == user_input1)
     img = Image.open(BytesIO(r.content))
     img.show()
-
+'''
 
 
 #Viewing Image (All Players)
