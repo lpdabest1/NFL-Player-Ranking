@@ -90,8 +90,8 @@ stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
 
 stats_data_categories = df[['Player','Team'] + stat_categories] 
 
-stats_data_categories.head()
-print(stats_data_categories.dtypes)
+#stats_data_categories.head()
+#print(stats_data_categories.dtypes)
 
 #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
 #   This is where I found a template for how to generate radar charts for comparing nfl quarterbacks
@@ -104,7 +104,7 @@ for i in stat_categories:
 stats_data_categories['INT Rank'] = (1 - stats_data_categories['INT Rank'])
 
 # Viewing our updated stats DataFrame
-print(stats_data_categories.head)
+#print(stats_data_categories.head)
 
 # General plot parameters for radar chart
 mpl.rcParams['font.family'] = 'Avenir'
@@ -156,14 +156,14 @@ def get_qb_data(data, team):
 
 # ******************User Input for customized Radar Chart ****************************
 
-user_input_demo = input('Enter a Team: ')
+#user_input_demo = input('Enter a Team: ')
 # Create figure
 fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
 ax1_demo = fig.add_subplot(221, projection='polar', facecolor='#ededed')
 plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
 lar_data_demo = get_qb_data(stats_data_categories, user_input_demo)# Plot QB data
 ax1 = create_radar_chart(ax1_demo, angles, lar_data_demo, team_colors[user_input_demo])
-plt.show()
+#plt.show()
 
 
 
@@ -186,17 +186,17 @@ ax1 = create_radar_chart(ax1, angles, lar_data, team_colors['Los Angeles Rams'])
 #ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
 #ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
 #ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
-plt.show()
+#plt.show()
 
 ''' Sorting dataframe for customization/user input'''
 players_sorted = sorted(df.Player.unique())
 
-user_input = input('Enter a player: ')
+#user_input = input('Enter a player: ')
 
 selected_player = df[(df.Player.isin(players_sorted))]
 
-if user_input in players_sorted:
-    print(user_input, df.loc[df['Player']==user_input])
+#if user_input in players_sorted:
+#    print(user_input, df.loc[df['Player']==user_input])
 
 
 
@@ -216,12 +216,12 @@ x = nfl_qb_data_season_2021_image.Player_Image
 df_selected_team = df1[(df1.Player.isin(df1)) & (df1.Player_Image.isin(x))]
 
 #Viewing Image (based on user input)
-user_input1 = input('Enter a player: ')
-if user_input1 in df_selected_team:
-    print('working...')
-    r = requests.get(df_selected_team['Player_Image'] == user_input1)
-    img = Image.open(BytesIO(r.content))
-    img.show()
+#user_input1 = input('Enter a player: ')
+#if user_input1 in df_selected_team:
+#    print('working...')
+#    r = requests.get(df_selected_team['Player_Image'] == user_input1)
+#    img = Image.open(BytesIO(r.content))
+#    img.show()
 
 
 

@@ -184,4 +184,4 @@ def scraping_2021_QB_Stats():
 
     df = pd.DataFrame(players)
     df.to_csv("NFL_Player_QB_Search_without_image.csv")
-    print(df)
+    #print(df)
