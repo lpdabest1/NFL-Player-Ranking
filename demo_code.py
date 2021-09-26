@@ -1,4 +1,5 @@
 #from pandas._config.config import reset_option
+import streamlit as st
 import NFL_QB_Season_2021_Stats
 import requests
 from bs4 import BeautifulSoup as bs
@@ -20,12 +21,31 @@ from io import BytesIO
 #from tabulate import tabulate
 #import plotly
 
+# Page Configuration
+st.set_page_config(
+    page_title="NFL Position Performance Metrics",
+    layout="centered",
+    initial_sidebar_state="expanded",
+)
+
+st.title('Pro Football Performance Metric')
+st.sidebar.title('Pro Football Statistics')
+
+st.markdown("""
+This app performs simple webscraping of NFL Football player stats data and creates a radar chart that we will be using as a common metric in order to have a visual representation of the performance done 
+by each team, according to the passing category)!
+* **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
+* **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
+Data is from 2006 to 2020.
+""")
+
 #import csv
 #with open('NFL_Player_QB_Search.csv', 'r') as file_csv:
 #    read = csv.reader(file_csv)
 #    for i in read:
 #        print(i)
 
+# Carryout scraping for current season qb stats
 NFL_QB_Season_2021_Stats.scraping_2021_QB_Stats()
 
 
