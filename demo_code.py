@@ -22,21 +22,22 @@ from io import BytesIO
 #import plotly
 
 # Page Configuration
-st.set_page_config(
-    page_title="NFL Position Performance Metrics",
-    layout="centered",
-    initial_sidebar_state="expanded",
-)
+#st.set_page_config(
+#    page_title="NFL Position Performance Metrics",
+#    layout="centered",
+#    initial_sidebar_state="expanded",
+#)
+
 
 st.title('Pro Football Performance Metric')
 st.sidebar.title('Pro Football Statistics')
 
 st.markdown("""
 This app performs simple webscraping of NFL Football player stats data and creates a radar chart that we will be using as a common metric in order to have a visual representation of the performance done 
-by each team, according to the passing category)!
+by each team (according to the passing category)!
 * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
 * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
-Data is from 2006 to 2020.
+Data is from 2006 to 2021.
 """)
 
 #import csv
@@ -46,7 +47,15 @@ Data is from 2006 to 2020.
 #        print(i)
 
 # Carryout scraping for current season qb stats
-NFL_QB_Season_2021_Stats.scraping_2021_QB_Stats()
+
+Pages = {"Passing Stats (Modern Era)": NFL_QB_Season_2021_Stats}
+selection = st.sidebar.selectbox("Select One Of The Following Individual Categories",list(Pages.keys()))
+page = Pages[selection]
+
+if page:
+    page.app()
+
+#NFL_QB_Season_2021_Stats.scraping_2021_QB_Stats
 
 
 nfl_qb_data_season_2021 = pd.read_csv('NFL_Player_QB_Search_without_image.csv')  
@@ -60,10 +69,10 @@ df.rename(columns={'Completion Percentage': 'Cmp%',
 #print(df)
 
 #Pretty Table Example
-'''df1 = df
-df1 = PrettyTable(df1)
-print(df1)
-'''
+#df1 = df
+#df1 = PrettyTable(df1)
+#print(df1)
+#
 
 #Pretty Table Import CSV Example
 #from prettytable import from_csv
@@ -89,6 +98,10 @@ print(df1)
 stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
 
 stats_data_categories = df[['Player','Team'] + stat_categories] 
+
+#Displaying new DataFrame that will be used for analyzing stats for radar charts
+#st.dataframe(stats_data_categories)
+
 
 #stats_data_categories.head()
 #print(stats_data_categories.dtypes)
@@ -153,17 +166,37 @@ def create_radar_chart(ax, angles, player_data, color='blue'):
 def get_qb_data(data, team):
     return np.asarray(data[data['Team'] == team])[0]
 
+def get_qb_player_data(data, player):
+    return np.asarray(data[data['Player'] == player])[0]
+
 
 # ******************User Input for customized Radar Chart ****************************
+# Sidebar User Options based on selected team
+sorted_unique_team = sorted(stats_data_categories.Team.unique())
+sorted_unique_players = sorted(stats_data_categories.Player.unique())
+user_input_demo = st.sidebar.selectbox('Team(s):', sorted_unique_team)
+user_input_demo_player = st.sidebar.multiselect('Player(s):', sorted_unique_players)
 
 #user_input_demo = input('Enter a Team: ')
+#st.write(user_input_demo)
 # Create figure
 fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
 ax1_demo = fig.add_subplot(221, projection='polar', facecolor='#ededed')
 plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
 lar_data_demo = get_qb_data(stats_data_categories, user_input_demo)# Plot QB data
 ax1 = create_radar_chart(ax1_demo, angles, lar_data_demo, team_colors[user_input_demo])
-#plt.show()
+plt.show()
+st.pyplot(fig)
+
+
+# Unique Player Create Figure
+fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
+ax2_demo = fig_player.add_subplot(222, projection='polar', facecolor='#ededed')
+#plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
+lar_data_demo1 = get_qb_player_data(stats_data_categories, user_input_demo_player)# Plot QB data
+ax2 = create_radar_chart(ax2_demo, angles, lar_data_demo1, team_colors['Las Vegas Raiders'])
+plt.show()
+st.pyplot(fig_player)
 
 
 
@@ -174,20 +207,20 @@ ax1 = create_radar_chart(ax1_demo, angles, lar_data_demo, team_colors[user_input
 # Create figure
 fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
 ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-#ax2 = fig.add_subplot(222, projection='polar', facecolor='#ededed')
-#ax3 = fig.add_subplot(223, projection='polar', facecolor='#ededed')
-#ax4 = fig.add_subplot(224, projection='polar', facecolor='#ededed')# Adjust space between subplots
+ax2 = fig.add_subplot(222, projection='polar', facecolor='#ededed')
+ax3 = fig.add_subplot(223, projection='polar', facecolor='#ededed')
+ax4 = fig.add_subplot(224, projection='polar', facecolor='#ededed')# Adjust space between subplots
 plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
 sf_data = get_qb_data(stats_data_categories, 'San Francisco 49ers')
 sea_data = get_qb_data(stats_data_categories, 'Seattle Seahawks')
 ari_data = get_qb_data(stats_data_categories, 'Arizona Cardinals')
 lar_data = get_qb_data(stats_data_categories, 'Los Angeles Rams')# Plot QB data
 ax1 = create_radar_chart(ax1, angles, lar_data, team_colors['Los Angeles Rams'])
-#ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
-#ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
-#ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
+ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
+ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
+ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
 #plt.show()
-
+#st.pyplot(fig)
 ''' Sorting dataframe for customization/user input'''
 players_sorted = sorted(df.Player.unique())
 
