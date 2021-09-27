@@ -175,8 +175,7 @@ def get_qb_player_data(data, player):
 sorted_unique_team = sorted(stats_data_categories.Team.unique())
 sorted_unique_players = sorted(stats_data_categories.Player.unique())
 user_input_demo = st.sidebar.selectbox('Team(s):', sorted_unique_team)
-user_input_demo_player = st.sidebar.multiselect('Player(s):', sorted_unique_players)
-
+user_input_demo_player = st.sidebar.selectbox('Player(s):', sorted_unique_players)
 #user_input_demo = input('Enter a Team: ')
 #st.write(user_input_demo)
 # Create figure
@@ -205,20 +204,20 @@ st.pyplot(fig_player)
 
 # NFC West
 # Create figure
-fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-ax2 = fig.add_subplot(222, projection='polar', facecolor='#ededed')
-ax3 = fig.add_subplot(223, projection='polar', facecolor='#ededed')
-ax4 = fig.add_subplot(224, projection='polar', facecolor='#ededed')# Adjust space between subplots
-plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-sf_data = get_qb_data(stats_data_categories, 'San Francisco 49ers')
-sea_data = get_qb_data(stats_data_categories, 'Seattle Seahawks')
-ari_data = get_qb_data(stats_data_categories, 'Arizona Cardinals')
-lar_data = get_qb_data(stats_data_categories, 'Los Angeles Rams')# Plot QB data
-ax1 = create_radar_chart(ax1, angles, lar_data, team_colors['Los Angeles Rams'])
-ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
-ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
-ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
+#fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
+#ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
+#ax2 = fig.add_subplot(222, projection='polar', facecolor='#ededed')
+#ax3 = fig.add_subplot(223, projection='polar', facecolor='#ededed')
+#ax4 = fig.add_subplot(224, projection='polar', facecolor='#ededed')# Adjust space between subplots
+#plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
+#sf_data = get_qb_data(stats_data_categories, 'San Francisco 49ers')
+#sea_data = get_qb_data(stats_data_categories, 'Seattle Seahawks')
+#ari_data = get_qb_data(stats_data_categories, 'Arizona Cardinals')
+#lar_data = get_qb_data(stats_data_categories, 'Los Angeles Rams')# Plot QB data
+#ax1 = create_radar_chart(ax1, angles, lar_data, team_colors['Los Angeles Rams'])
+#ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
+#ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
+#ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
 #plt.show()
 #st.pyplot(fig)
 ''' Sorting dataframe for customization/user input'''
