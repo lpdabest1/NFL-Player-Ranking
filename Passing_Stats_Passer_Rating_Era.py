@@ -13,7 +13,6 @@ import matplotlib.image as mpim
 import numpy as np
 from mpl_toolkits import mplot3d
 #%matplotlib inline
-from prettytable import PrettyTable
 
 def app():
 
