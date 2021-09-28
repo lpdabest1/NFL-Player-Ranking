@@ -22,18 +22,18 @@ def app():
     by each team (according to the passing category)!
     * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
     * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
-    Data is from 2006 to 2021.
+    Data is from 1932 to 2005.
     """)
 
 
 
     # calculating current nfl season as most recent season available to scrape
-    current_season = 2022
+    last_passer_rating_season = 2006
     st.sidebar.header('User Customization')
-    selected_year = st.sidebar.selectbox('Year', list(reversed(range(2006,current_season))))
+    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,last_passer_rating_season))))
 
     @st.cache
-    def scraping_2021_QB_Stats(selected_year):
+    def scraping_QB_Stats(selected_year):
         players = []
 
 
@@ -80,9 +80,9 @@ def app():
                         games_played = games_played_search.text
     
                         '''QB Record and Percentage Wins for Players Collected'''
-                        qbRec_search = i.find('td',{'data-stat':'qb_rec'})
-                        qbRec_percentage = qbRec_search['csk']
-                        qbRec = qbRec_search.text       
+                        #qbRec_search = i.find('td',{'data-stat':'qb_rec'})
+                        #bRec_percentage = qbRec_search['csk']
+                        #qbRec = qbRec_search.text       
 
                         '''Passes Completed of Player Collected'''
                         passes_completed_search = i.find('td',{'data-stat':'pass_cmp'})
@@ -123,8 +123,8 @@ def app():
 
 
                         '''First Downs of Player Collected'''
-                        firstdowns_search = i.find('td',{'data-stat':'pass_first_down'})
-                        firstdowns = firstdowns_search.text        
+                        #firstdowns_search = i.find('td',{'data-stat':'pass_first_down'})
+                        #firstdowns = firstdowns_search.text        
 
                         '''Longest Pass of Player Collected'''
                         pass_long_search = i.find('td',{'data-stat':'pass_long'})
@@ -157,23 +157,23 @@ def app():
 
 
                         '''QBR'''
-                        qbr_search = i.find('td',{'data-stat':'qbr'})
-                        qbr = qbr_search.text
+                        #qbr_search = i.find('td',{'data-stat':'qbr'})
+                        #qbr = qbr_search.text
 
 
                         '''Sacks'''
-                        sacks_taken_search = i.find('td',{'data-stat':'pass_sacked'})
-                        sacks_taken = sacks_taken_search.text
+                        #sacks_taken_search = i.find('td',{'data-stat':'pass_sacked'})
+                        #acks_taken = sacks_taken_search.text
 
 
                         '''Sack Percentage'''
-                        sacks_taken_percentage_search = i.find('td',{'data-stat':'pass_sacked_perc'})
-                        sacks_taken_percentage = sacks_taken_percentage_search.text
+                        #sacks_taken_percentage_search = i.find('td',{'data-stat':'pass_sacked_perc'})
+                        #sacks_taken_percentage = sacks_taken_percentage_search.text
         
 
                         '''Sack Yards Loss'''
-                        sack_yards_search = i.find('td',{'data-stat':'pass_sacked_yds'})
-                        sack_yards = sack_yards_search.text
+                        #sack_yards_search = i.find('td',{'data-stat':'pass_sacked_yds'})
+                        #sack_yards = sack_yards_search.text
 
 
 
@@ -182,11 +182,11 @@ def app():
 
 
                         #Formatting Data Collected
-                        player = { "Player": names, "Team": team, "Age": age, "Games Played": games, "Games Started": games_played, "QB-Record": qbRec, "QB Wins Percentage": qbRec_percentage,
+                        player = { "Player": names, "Team": team, "Age": age, "Games Played": games, "Games Started": games_played,
                     "Passes Completed": passes_completed, "Passes Attempted": passes_attempted, "Completion Percentage": completion_percentage, "Passing Yards": passing_yards, "Passing Touchdowns": passing_touchdowns,
-                    "Touchdown Percentage": touchdown_percentage, "Interceptions": interceptions, "Interceptions Percentage": interception_percentage, "First Downs": firstdowns, "Longest Pass": pass_long,
+                    "Touchdown Percentage": touchdown_percentage, "Interceptions": interceptions, "Interceptions Percentage": interception_percentage, "Longest Pass": pass_long,
                     "Yards Per Attempt": yards_per_attempt, "Adjusted Yards Per Attempt": adj_yards_per_attempt, "Yards per Completion": yards_per_completion, "Yards Per Game": yards_per_game,
-                    "Passer Rating": passer_rating, "QBR": qbr, "Times Sacked": sacks_taken, "Sacked Percentage": sacks_taken_percentage, "Yards Loss (Sack)": sack_yards}
+                    "Passer Rating": passer_rating}
                         #Appending Each player to Players List
                         players.append(player)
             
@@ -201,10 +201,10 @@ def app():
 
 
         df = pd.DataFrame(players)
-        df.to_csv("NFL_Player_QB_Search_without_image.csv")
+        df.to_csv("NFL_Player_QB_Search_Passer_Rating_Era.csv")
         #print(df)
         return df
-    df = scraping_2021_QB_Stats(selected_year)
+    df = scraping_QB_Stats(selected_year)
 
 
     st.header('Quarterback Passing Statistics')
@@ -248,15 +248,10 @@ def app():
     #print(tabulate(df, headers='keys',tablefmt='psql'))
 
 
-    #Texttable Example
-    #table = Texttable()
-    #table.add_rows(x1)
-    #print(table.draw())
-
     # Stat Categories
     # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
     #stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
-    stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
+    stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','Passer Rating']
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
 
@@ -374,6 +369,13 @@ def app():
     ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
     plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
     lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
+
+
+    # Testing if team selected does not exist in current team set (team_colors)
+    #fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
+    #ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
+    #plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
+    #lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
     ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
     #plt.show()
     st.pyplot(fig)
@@ -396,82 +398,3 @@ def app():
             ax2 = create_radar_chart(ax2, angles, lar_data_demo1)
         #plt.show()
         st.pyplot(fig_player)
-
-
-
-
-
-
-    # NFC West
-    # Create figure
-    #fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    #ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-    #ax2 = fig.add_subplot(222, projection='polar', facecolor='#ededed')
-    #ax3 = fig.add_subplot(223, projection='polar', facecolor='#ededed')
-    #ax4 = fig.add_subplot(224, projection='polar', facecolor='#ededed')# Adjust space between subplots
-    #plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-    #sf_data = get_qb_data(stats_data_categories, 'San Francisco 49ers')
-    #sea_data = get_qb_data(stats_data_categories, 'Seattle Seahawks')
-    #ari_data = get_qb_data(stats_data_categories, 'Arizona Cardinals')
-    #lar_data = get_qb_data(stats_data_categories, 'Los Angeles Rams')# Plot QB data
-    #ax1 = create_radar_chart(ax1, angles, lar_data, team_colors['Los Angeles Rams'])
-    #ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
-    #ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
-    #ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
-    #plt.show()
-    #st.pyplot(fig)
-    
-    
-    #Sorting dataframe for customization/user input
-    #players_sorted = sorted(df.Player.unique())
-
-    #user_input = input('Enter a player: ')
-
-    #selected_player = df[(df.Player.isin(players_sorted))]
-
-    #if user_input in players_sorted:
-    #    print(user_input, df.loc[df['Player']==user_input])
-
-
-
-
-
-    #y = nfl_qb_data_season_2021
-
-    #x = nfl_qb_data_season_2021.Player_Image
-
-    #nfl_qb_data_season_2021_image = pd.read_csv('NFL_Player_QB_Search.csv')  
-    #df1 = pd.DataFrame(nfl_qb_data_season_2021_image)
-
-    #y = df1
-
-    #x = nfl_qb_data_season_2021_image.Player_Image
-
-    #df_selected_team = df1[(df1.Player.isin(df1)) & (df1.Player_Image.isin(x))]
-
-    #Viewing Image (based on user input)
-    #user_input1 = input('Enter a player: ')
-    #if user_input1 in df_selected_team:
-    #    print('working...')
-    #    r = requests.get(df_selected_team['Player_Image'] == user_input1)
-    #    img = Image.open(BytesIO(r.content))
-    #    img.show()
-
-
-
-    #Viewing Image (All Players)
-    #for i in x:
-    #    r = requests.get(i)
-    #    img = Image.open(BytesIO(r.content))
-    #    img.show()
-        
-        #img = plt.savefig(i)
-        #plt.show()
-        #a = plt.imread(i)
-        #plt.imshow(img)
-        #plt.show(a)
-        #plt.savefig(i)
-        #Image.open(i)
-
-    # DataFrame Columns
-    #df.head()
