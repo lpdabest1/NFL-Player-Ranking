@@ -315,6 +315,8 @@ def app():
         # DataFrame for Team Passing Rankings
         Team_Ranks_df = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_]
         st.dataframe(Team_Ranks_df)
+        st.table(Team_Ranks_df)
+
 
 
 
