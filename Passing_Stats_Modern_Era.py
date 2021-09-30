@@ -203,8 +203,9 @@ def app():
 
     st.dataframe(df)
 
+
     df.rename(columns={'Completion Percentage': 'Cmp%',
-    'Passing Yards': 'Pass Yds', 'Passing Touchdowns':'Pass TD','Touchdown Percentage':'TD%','Interceptions':'INT'}, inplace= True)
+    'Passing Yards': 'Pass Yds', 'Passing Touchdowns':'Pass TD','Touchdown Percentage':'TD%','Interceptions Percentage':'INT%'}, inplace= True)
     #print(df)
 
     #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
@@ -213,7 +214,7 @@ def app():
     # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
 
     #stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
-    stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
+    stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT%','QBR']
     #stats_data_categories_rankings = df['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
@@ -230,7 +231,7 @@ def app():
         stats_data_categories[i + ' Rank'] = stats_data_categories[i].rank(pct=True)
 
     # reverse the stats of ascension sort for interceptions stat category
-    stats_data_categories['INT Rank'] = (1 - stats_data_categories['INT Rank'])
+    stats_data_categories['INT% Rank'] = (1 - stats_data_categories['INT% Rank'])
 
     # Viewing our updated stats DataFrame
     #print(stats_data_categories.head)
@@ -293,16 +294,9 @@ def app():
     mean_pass_yds = stats_data_categories['Pass Yds'].mean()
     mean_pass_td = stats_data_categories['Pass TD'].mean()
     mean_pass_td_percent = stats_data_categories['TD%'].mean()
-    mean_int = stats_data_categories['INT'].mean()
     mean_qbr = stats_data_categories['QBR'].mean()
-    means_rankings.append(mean_cmp)
-    means_rankings.append(mean_pass_yds)
-    means_rankings.append(mean_pass_td)
-    means_rankings.append(mean_pass_td_percent)
-    means_rankings.append(mean_int)
-    means_rankings.append(mean_qbr)
 
-    st.table(means_rankings)
+
 
 
 
@@ -382,12 +376,12 @@ def app():
             st.dataframe(Player_Ranks_df)
 
     # Player Comparisons
-    if st.sidebar.checkbox('Player Comparison ** Bonus **'):
+    if st.sidebar.checkbox('Player(s) Comparison ** Bonus **'):
         user_input_demo_player_1 = st.sidebar.selectbox('Quarterback 1:', sorted_unique_players_)
         user_input_demo_player_2 = st.sidebar.selectbox('Quarterback 2:', sorted_unique_players_)
-        st.sidebar.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
+        st.sidebar.info('Have a certain few Quarterbacks in mind? Select two Quarterback that you want to view the passing performance for to see how they stacked up for the season in comparison to each other!')
 
-        # Unique Player Create Figure
+        # Unique Two Players Create Figure
         fig_players = plt.figure(figsize=(15, 15), facecolor='white')
         ax_player_1 = fig_players.add_subplot(221, projection='polar', facecolor='#ededed')
         ax_player_2 = fig_players.add_subplot(222, projection='polar', facecolor='#ededed')
@@ -397,8 +391,8 @@ def app():
         
         if user_input_demo_player_1:
             if st.sidebar.checkbox('Custom Color'):
-                st.info('You can type in a color to customize the radar chart to your liking. Blue, Teal, Red perhaps? Just enter it to give it a try. Note: The default color is blue if text is left empty.')
                 custom_color = st.sidebar.text_input("Enter a custom color for chart")
+                st.sidebar.info('You can type in a color to customize the radar chart to your liking. Blue, Teal, Red perhaps? Just enter it to give it a try. Note: The default color is blue if text is left empty.')
                 if not custom_color:
                     default = 'blue'
                     custom_color=default
@@ -417,3 +411,43 @@ def app():
             # DataFrame for Team Passing Rankings
             Player_Ranks_2 = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_2]
             st.dataframe(Player_Ranks_2)
+
+
+    # Team Comparisons
+    if st.sidebar.checkbox('Team(s) Comparison ** Bonus **'):
+        user_input_demo_team_1 = st.sidebar.selectbox('Team 1:', sorted_unique_team_)
+        user_input_demo_team_2 = st.sidebar.selectbox('Team 2:', sorted_unique_team_)
+        st.sidebar.info('Have a certain few Teams in mind? Select two teams that you want to view the passing performance for to see how they stacked up for the season in comparison to each other!')
+
+        # Unique Teams Create Figure
+        fig_teams = plt.figure(figsize=(15, 15), facecolor='white')
+        ax_team_1 = fig_teams.add_subplot(221, projection='polar', facecolor='#ededed')
+        ax_team_2 = fig_teams.add_subplot(222, projection='polar', facecolor='#ededed')
+        data_demo_team1 = get_qb_data(stats_data_categories, user_input_demo_team_1)# Plot QB data
+        data_demo_team2 = get_qb_data(stats_data_categories, user_input_demo_team_2)
+        
+        
+        if user_input_demo_team_1:
+            if user_input_demo_team_1 not in team_colors:
+                default = 'grey'
+                custom_color=default
+                ax_team_1 = create_radar_chart(ax_team_1, angles, data_demo_team1, color=custom_color)
+            else:
+                ax_team_1 = create_radar_chart(ax_team_1, angles, data_demo_team1, team_colors[user_input_demo_team_1])
+
+        if user_input_demo_team_2:
+            if user_input_demo_team_2 not in team_colors:
+                default = 'grey'
+                custom_color=default
+                ax_team_2 = create_radar_chart(ax_team_2, angles, data_demo_team2, color=custom_color)
+            else:
+                ax_team_2 = create_radar_chart(ax_team_2, angles, data_demo_team2, team_colors[user_input_demo_team_2])
+
+        st.pyplot(fig_teams)
+
+        # DataFrame for Team Passing Rankings
+        Team_Ranks_1 = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_team_1]
+        Team_Ranks_2 = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_team_2]
+        st.dataframe(Team_Ranks_1)
+        st.dataframe(Team_Ranks_2)
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT%, QBR. The greater the height and shape of one category, the better the player was in that category.')
