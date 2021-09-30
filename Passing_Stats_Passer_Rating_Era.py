@@ -36,7 +36,7 @@ def app():
     st.sidebar.header('User Customization')
     selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,last_passer_rating_season))))
 
-    @st.cache
+    
     def scraping_QB_Stats(selected_year):
         players = []
 
