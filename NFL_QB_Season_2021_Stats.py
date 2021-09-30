@@ -19,7 +19,7 @@ def app():
     st.markdown("""
     This app performs simple webscraping of NFL Football player stats data and creates a radar chart that we will be using as a common metric in order to have a visual representation of the performance done 
     by each team (according to the passing category)!
-    * **Python libraries:** base64, pandas, streamlit, numpy, matplotlib, seaborn
+    * **Python libraries:** pandas, streamlit, numpy, matplotlib, pillow, beautifulsoup4
     * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
     Data is from 2006 to 2021.
     """)
@@ -175,11 +175,6 @@ def app():
                         sack_yards = sack_yards_search.text
 
 
-
-
-
-
-
                         #Formatting Data Collected
                         player = { "Player": names, "Team": team, "Age": age, "Games Played": games, "Games Started": games_played, "QB-Record": qbRec, "QB Wins Percentage": qbRec_percentage,
                     "Passes Completed": passes_completed, "Passes Attempted": passes_attempted, "Completion Percentage": completion_percentage, "Passing Yards": passing_yards, "Passing Touchdowns": passing_touchdowns,
@@ -211,46 +206,9 @@ def app():
 
     st.dataframe(df)
 
-
-
-    # Code taken from app.py
-    #NFL_QB_Season_2021_Stats.scraping_2021_QB_Stats
-
-    # Read csv with data into a new variable
-    #nfl_qb_data_season_2021 = pd.read_csv('NFL_Player_QB_Search_without_image.csv') 
-    #print(nfl_qb_data_season_2021)
-    #nfl_qb_data_season_2021.head()  
-    #print(nfl_qb_data_season_2021.head())
-    #print(nfl_qb_data_season_2021.Player_Image)
-
-
-    # New Method ---> set continue reading df
-
-    #df = pd.DataFrame(nfl_qb_data_season_2021)
-
-
     df.rename(columns={'Completion Percentage': 'Cmp%',
     'Passing Yards': 'Pass Yds', 'Passing Touchdowns':'Pass TD','Touchdown Percentage':'TD%','Interceptions':'INT'}, inplace= True)
     #print(df)
-
-
-    #Pretty Table Import CSV Example
-    #from prettytable import from_csv
-        
-    #with open('NFL_Player_QB_Search.csv', 'r') as fp: 
-    #    x = from_csv(fp)
-        
-    #print(x)
-
-    #tab_df_table = tabulate(df, headers='keys',tablefmt='psql')
-
-    #print(tabulate(df, headers='keys',tablefmt='psql'))
-
-
-    #Texttable Example
-    #table = Texttable()
-    #table.add_rows(x1)
-    #print(table.draw())
 
     # Stat Categories
     # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
@@ -261,10 +219,6 @@ def app():
 
     #Displaying new DataFrame that will be used for analyzing stats for radar charts
     #st.dataframe(stats_data_categories)
-
-
-    #stats_data_categories.head()
-    #print(stats_data_categories.dtypes)
 
     #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
     #   This is where I found a template for how to generate radar charts for comparing nfl quarterbacks
@@ -329,43 +283,19 @@ def app():
     def get_qb_player_data(data, player):
         return np.asarray(data[data['Player'] == player])[0]
 
-
-
-
     # ******************User Input for customized Radar Chart ****************************
-    # Sidebar User Options based on selected team
+    # Sidebar User Options based on selected team and player
     sorted_unique_team_ = sorted(stats_data_categories.Team.unique())
     sorted_unique_players_ = sorted(stats_data_categories.Player.unique())
+
+
+
     user_input_demo_ = st.sidebar.selectbox('Team(s):', sorted_unique_team_)
+    st.info('Select a team that you want to view the passing performance from their Quarterback to see how they stacked up for the season!')
+
+
     user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)
-
-    # Demo: Trial and Error
-    # Sidebar - Team selection
-    #sorted_unique_team = sorted(stats_data_categories.Team.unique())
-    #selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)
-
-
-    # Sidebar - Player selection
-    #sorted_unique_player = sorted(stats_data_categories.Player.unique())
-    #selected_player = st.sidebar.multiselect('Player', sorted_unique_player, sorted_unique_player) 
-
-    #df_selection = stats_data_categories[(stats_data_categories.Team.isin(selected_team)) ]
-    #st.dataframe(df_selection)
-    # Create figure based on Team
-    #if len(df_selection) > 0:
-    #    for i in df_selection:
-    #        fig_demo = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    #        ax11 = fig_demo.add_subplot(221, projection='polar', facecolor='#ededed')
-    #        plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-    #        lar_data_demo11 = get_qb_data(stats_data_categories, i)# Plot QB data
-    #        ax11 = create_radar_chart(ax11, angles, lar_data_demo11)
-            #plt.show()
-    #        st.pyplot(fig_demo)    
-
-
-
-
-
+    st.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
 
 
     # Create figure based on Team
@@ -374,18 +304,17 @@ def app():
     plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
     lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
     ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
-    #plt.show()
     st.pyplot(fig)
-
+    
 
     # Unique Player Create Figure
     fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
     ax2 = fig_player.add_subplot(222, projection='polar', facecolor='#ededed')
-    #plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
     lar_data_demo1 = get_qb_player_data(stats_data_categories, user_input_demo_player_)# Plot QB data
     
     if user_input_demo_player_:
         if st.sidebar.checkbox('Custom Color'):
+            st.info('You can type in a color to customize the radar chart to your liking. Blue, Teal, Red perhaps? Just enter it to give it a try. Note: The default color is blue if text is left empty.')
             custom_color = st.sidebar.text_input("Enter a custom color for chart")
             if not custom_color:
                 default = 'blue'
@@ -393,84 +322,5 @@ def app():
             ax2 = create_radar_chart(ax2, angles, lar_data_demo1, color=custom_color)
         else:
             ax2 = create_radar_chart(ax2, angles, lar_data_demo1)
-        #plt.show()
         st.pyplot(fig_player)
 
-
-
-
-
-
-    # NFC West
-    # Create figure
-    #fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    #ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-    #ax2 = fig.add_subplot(222, projection='polar', facecolor='#ededed')
-    #ax3 = fig.add_subplot(223, projection='polar', facecolor='#ededed')
-    #ax4 = fig.add_subplot(224, projection='polar', facecolor='#ededed')# Adjust space between subplots
-    #plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-    #sf_data = get_qb_data(stats_data_categories, 'San Francisco 49ers')
-    #sea_data = get_qb_data(stats_data_categories, 'Seattle Seahawks')
-    #ari_data = get_qb_data(stats_data_categories, 'Arizona Cardinals')
-    #lar_data = get_qb_data(stats_data_categories, 'Los Angeles Rams')# Plot QB data
-    #ax1 = create_radar_chart(ax1, angles, lar_data, team_colors['Los Angeles Rams'])
-    #ax2 = create_radar_chart(ax2, angles, ari_data, team_colors['Arizona Cardinals'])
-    #ax3 = create_radar_chart(ax3, angles, sea_data, team_colors['Seattle Seahawks'])
-    #ax4 = create_radar_chart(ax4, angles, sf_data, team_colors['San Francisco 49ers'])
-    #plt.show()
-    #st.pyplot(fig)
-    
-    
-    #Sorting dataframe for customization/user input
-    #players_sorted = sorted(df.Player.unique())
-
-    #user_input = input('Enter a player: ')
-
-    #selected_player = df[(df.Player.isin(players_sorted))]
-
-    #if user_input in players_sorted:
-    #    print(user_input, df.loc[df['Player']==user_input])
-
-
-
-
-
-    #y = nfl_qb_data_season_2021
-
-    #x = nfl_qb_data_season_2021.Player_Image
-
-    #nfl_qb_data_season_2021_image = pd.read_csv('NFL_Player_QB_Search.csv')  
-    #df1 = pd.DataFrame(nfl_qb_data_season_2021_image)
-
-    #y = df1
-
-    #x = nfl_qb_data_season_2021_image.Player_Image
-
-    #df_selected_team = df1[(df1.Player.isin(df1)) & (df1.Player_Image.isin(x))]
-
-    #Viewing Image (based on user input)
-    #user_input1 = input('Enter a player: ')
-    #if user_input1 in df_selected_team:
-    #    print('working...')
-    #    r = requests.get(df_selected_team['Player_Image'] == user_input1)
-    #    img = Image.open(BytesIO(r.content))
-    #    img.show()
-
-
-
-    #Viewing Image (All Players)
-    #for i in x:
-    #    r = requests.get(i)
-    #    img = Image.open(BytesIO(r.content))
-    #    img.show()
-        
-        #img = plt.savefig(i)
-        #plt.show()
-        #a = plt.imread(i)
-        #plt.imshow(img)
-        #plt.show(a)
-        #plt.savefig(i)
-        #Image.open(i)
-
-    # DataFrame Columns
-    #df.head()
