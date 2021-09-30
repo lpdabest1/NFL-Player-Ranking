@@ -221,7 +221,7 @@ def app():
     # Convert data to numerical values
     for i in stat_categories:
         stats_data_categories[i] = pd.to_numeric(df[i])
-        
+
     #Displaying new DataFrame that will be used for analyzing stats for radar charts
     #st.dataframe(stats_data_categories)
 
@@ -310,18 +310,23 @@ def app():
         plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
         lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
         ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
+        if user_input_demo_ not in team_colors:
+            ax1 = create_radar_chart(ax1, angles, lar_data_demo, color='grey')
+        else:
+            ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
+            #plt.show()
+            #st.pyplot(fig)
+        
         st.pyplot(fig)
         st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+
+
 
 
     if st.sidebar.checkbox('Player(s)'):
         st.subheader('Player Search:')
         user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)
         st.sidebar.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
-
-
-
-
 
         # Unique Player Create Figure
         fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
