@@ -214,6 +214,7 @@ def app():
 
     #stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
     stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
+    #stats_data_categories_rankings = df['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
 
@@ -284,6 +285,38 @@ def app():
     def get_qb_player_data(data, player):
         return np.asarray(data[data['Player'] == player])[0]
 
+
+    # **************** Ranking(s) **************************************
+    # ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
+    means_rankings = []
+    mean_cmp = stats_data_categories['Cmp%'].mean()
+    mean_pass_yds = stats_data_categories['Pass Yds'].mean()
+    mean_pass_td = stats_data_categories['Pass TD'].mean()
+    mean_pass_td_percent = stats_data_categories['TD%'].mean()
+    mean_int = stats_data_categories['INT'].mean()
+    mean_qbr = stats_data_categories['QBR'].mean()
+    means_rankings.append(mean_cmp)
+    means_rankings.append(mean_pass_yds)
+    means_rankings.append(mean_pass_td)
+    means_rankings.append(mean_pass_td_percent)
+    means_rankings.append(mean_int)
+    means_rankings.append(mean_qbr)
+
+    st.table(means_rankings)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # ******************User Input for customized Radar Chart ****************************
     # Sidebar User Options based on selected team and player
     sorted_unique_team_ = sorted(stats_data_categories.Team.unique())
@@ -310,13 +343,13 @@ def app():
         else:
             ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
         st.pyplot(fig)
-        st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The greater the height and shape of one category, the better the player was in that category.')
         
         # DataFrame for Team Passing Rankings
         Team_Ranks_df = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_]
         st.dataframe(Team_Ranks_df)
-        if st.checkbox('Team_Table'):
-            st.table(Team_Ranks_df)
+        #if st.checkbox('Team_Table'):
+        #    st.table(Team_Ranks_df)
 
 
 
@@ -342,8 +375,45 @@ def app():
             else:
                 ax2 = create_radar_chart(ax2, angles, data_demo_player)
             st.pyplot(fig_player)
-            st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+            st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The greater the height and shape of one category, the better the player was in that category.')
             
             # DataFrame for Team Passing Rankings
             Player_Ranks_df = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_]
             st.dataframe(Player_Ranks_df)
+
+    # Player Comparisons
+    if st.sidebar.checkbox('Player Comparison ** Bonus **'):
+        user_input_demo_player_1 = st.sidebar.selectbox('Quarterback 1:', sorted_unique_players_)
+        user_input_demo_player_2 = st.sidebar.selectbox('Quarterback 2:', sorted_unique_players_)
+        st.sidebar.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
+
+        # Unique Player Create Figure
+        fig_players = plt.figure(figsize=(15, 15), facecolor='white')
+        ax_player_1 = fig_players.add_subplot(221, projection='polar', facecolor='#ededed')
+        ax_player_2 = fig_players.add_subplot(222, projection='polar', facecolor='#ededed')
+        data_demo_player1 = get_qb_player_data(stats_data_categories, user_input_demo_player_1)# Plot QB data
+        data_demo_player2 = get_qb_player_data(stats_data_categories, user_input_demo_player_2)
+        
+        
+        if user_input_demo_player_1:
+            if st.sidebar.checkbox('Custom Color'):
+                st.info('You can type in a color to customize the radar chart to your liking. Blue, Teal, Red perhaps? Just enter it to give it a try. Note: The default color is blue if text is left empty.')
+                custom_color = st.sidebar.text_input("Enter a custom color for chart")
+                if not custom_color:
+                    default = 'blue'
+                    custom_color=default
+                ax_player_1 = create_radar_chart(ax_player_1, angles, data_demo_player1, color=custom_color)
+                ax_player_2 = create_radar_chart(ax_player_2, angles, data_demo_player2, color=custom_color)
+            else:
+                ax_player_1 = create_radar_chart(ax_player_1, angles, data_demo_player1)
+                ax_player_2 = create_radar_chart(ax_player_2, angles, data_demo_player2)
+            st.pyplot(fig_players)
+            #st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The greater the height and shape of one category, the better the player was in that category.')
+            
+            # DataFrame for Team Passing Rankings
+            Player_Ranks_1 = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_1]
+            st.dataframe(Player_Ranks_1)
+
+            # DataFrame for Team Passing Rankings
+            Player_Ranks_2 = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_2]
+            st.dataframe(Player_Ranks_2)
