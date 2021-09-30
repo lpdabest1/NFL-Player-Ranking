@@ -218,6 +218,10 @@ def app():
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
 
+    # Convert data to numerical values
+    for i in stat_categories:
+        stats_data_categories[i] = pd.to_numeric(df[i])
+        
     #Displaying new DataFrame that will be used for analyzing stats for radar charts
     #st.dataframe(stats_data_categories)
 
