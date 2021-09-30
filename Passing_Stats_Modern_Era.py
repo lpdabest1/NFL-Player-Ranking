@@ -40,10 +40,7 @@ def app():
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'}
         page = requests.get(url,headers=headers, timeout=2, allow_redirects = True )
         soup = bs(page.content, 'html.parser')
-        href = soup.find('table', {'id': 'passing'})
-        href_th = soup.find_all('th',{'class':'right'})
         href_tbody = soup.find_all('tbody')
-        href_tr = soup.find_all('tr')
 
 
         for i in href_tbody:
@@ -210,6 +207,8 @@ def app():
     'Passing Yards': 'Pass Yds', 'Passing Touchdowns':'Pass TD','Touchdown Percentage':'TD%','Interceptions':'INT'}, inplace= True)
     #print(df)
 
+    #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
+    #   This is where I found a template for how to generate radar charts for comparing nfl quarterbacks
     # Stat Categories
     # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
 
@@ -224,9 +223,6 @@ def app():
 
     #Displaying new DataFrame that will be used for analyzing stats for radar charts
     #st.dataframe(stats_data_categories)
-
-    #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
-    #   This is where I found a template for how to generate radar charts for comparing nfl quarterbacks
 
     # Create rankings for stat categories
     for i in stat_categories:
@@ -309,14 +305,10 @@ def app():
         ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
         plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
         data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
-        #ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
         if user_input_demo_ not in team_colors:
             ax1 = create_radar_chart(ax1, angles, data_demo, color='grey')
         else:
             ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
-            #plt.show()
-            #st.pyplot(fig)
-        
         st.pyplot(fig)
         st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
 
