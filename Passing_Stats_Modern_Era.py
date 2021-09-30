@@ -340,4 +340,7 @@ def app():
                 ax2 = create_radar_chart(ax2, angles, data_demo_player)
             st.pyplot(fig_player)
             st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
-            st.dataframe(stats_data_categories)
+            
+            # DataFrame for Team Passing Rankings
+            Player_Ranks_df = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_]
+            st.dataframe(Player_Ranks_df)
