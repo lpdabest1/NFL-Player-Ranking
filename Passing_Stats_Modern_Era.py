@@ -212,6 +212,7 @@ def app():
 
     # Stat Categories
     # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
+
     #stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
     stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
 
@@ -289,13 +290,20 @@ def app():
     sorted_unique_players_ = sorted(stats_data_categories.Player.unique())
 
 
+    st.title('Performance Charts')
+    st.markdown('Both the Team and Player Checkboxes on the left sidebar provide customization for which way you would like to view the passing performance charts. The two options are either by Team or by Player. The choice is yours.')
 
-    user_input_demo_ = st.sidebar.selectbox('Team(s):', sorted_unique_team_)
-    st.info('Select a team that you want to view the passing performance from their Quarterback to see how they stacked up for the season!')
 
+    st.sidebar.subheader('Chart Perference(s):')
+    if st.sidebar.checkbox('Team(s)'):
+        st.subheader('Team Passing Performance: Quarterback')
+        user_input_demo_ = st.sidebar.selectbox('Team(s):', sorted_unique_team_)
+        st.sidebar.info('Select a team from the left sidebar that you want to view the passing performance from their Quarterback to see how they stacked up for the season!')
 
-    user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)
-    st.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
+    if st.sidebar.checkbox('Player(s)'):
+        st.subheader('Player Search:')
+        user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)
+        st.sidebar.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
 
 
     # Create figure based on Team
@@ -305,7 +313,8 @@ def app():
     lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
     ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
     st.pyplot(fig)
-    
+    st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+
 
     # Unique Player Create Figure
     fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
@@ -323,4 +332,4 @@ def app():
         else:
             ax2 = create_radar_chart(ax2, angles, lar_data_demo1)
         st.pyplot(fig_player)
-
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
