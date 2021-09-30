@@ -311,7 +311,7 @@ def app():
             ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
         st.pyplot(fig)
         st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
-
+        st.dataframe(stats_data_categories)
 
 
 
@@ -337,3 +337,4 @@ def app():
                 ax2 = create_radar_chart(ax2, angles, data_demo_player)
             st.pyplot(fig_player)
             st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+            st.dataframe(stats_data_categories)
