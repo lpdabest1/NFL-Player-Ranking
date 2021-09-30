@@ -249,9 +249,7 @@ def app():
     st.header('Quarterback Passing Statistics')
     st.subheader('NFL Season ' + str(selected_year) + ' Passing Statistics')
 
-    st.dataframe(df)
-
-
+    #st.dataframe(df)
 
     # Code taken from app.py
     #NFL_QB_Season_2021_Stats.scraping_2021_QB_Stats
@@ -347,8 +345,8 @@ def app():
 
     # Function to get QB data
     
-    def get_qb_data(data, team):
-        return np.asarray(data[data['Team'] == team])[0]
+    #def get_qb_data(data, team):
+    #    return np.asarray(data[data['Team'] == team])[0]
 
 
     
@@ -360,35 +358,10 @@ def app():
 
     # ******************User Input for customized Radar Chart ****************************
     # Sidebar User Options based on selected team
-    sorted_unique_team_ = sorted(stats_data_categories.Team.unique())
     sorted_unique_players_ = sorted(stats_data_categories.Player.unique())
-    user_input_demo_ = st.sidebar.selectbox('Team(s):', sorted_unique_team_)
     user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)   
 
 
-
-
-
-
-
-    # Create figure based on Team
-    #fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    #ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-    #plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-    #lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
-
-
-    # Testing if team selected does not exist in current team set (team_colors)
-    fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-    plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-    lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
-    if user_input_demo_ not in team_colors:
-        ax1 = create_radar_chart(ax1, angles, lar_data_demo, color='grey')
-    else:
-        ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
-    #plt.show()
-    st.pyplot(fig)
 
 
     # Unique Player Create Figure
