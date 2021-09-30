@@ -308,12 +308,12 @@ def app():
         fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
         ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
         plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-        lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
-        ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
+        data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
+        #ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
         if user_input_demo_ not in team_colors:
-            ax1 = create_radar_chart(ax1, angles, lar_data_demo, color='grey')
+            ax1 = create_radar_chart(ax1, angles, data_demo, color='grey')
         else:
-            ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
+            ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
             #plt.show()
             #st.pyplot(fig)
         
@@ -331,7 +331,7 @@ def app():
         # Unique Player Create Figure
         fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
         ax2 = fig_player.add_subplot(222, projection='polar', facecolor='#ededed')
-        lar_data_demo1 = get_qb_player_data(stats_data_categories, user_input_demo_player_)# Plot QB data
+        data_demo_player = get_qb_player_data(stats_data_categories, user_input_demo_player_)# Plot QB data
         
         if user_input_demo_player_:
             if st.sidebar.checkbox('Custom Color'):
@@ -340,8 +340,8 @@ def app():
                 if not custom_color:
                     default = 'blue'
                     custom_color=default
-                ax2 = create_radar_chart(ax2, angles, lar_data_demo1, color=custom_color)
+                ax2 = create_radar_chart(ax2, angles, data_demo_player, color=custom_color)
             else:
-                ax2 = create_radar_chart(ax2, angles, lar_data_demo1)
+                ax2 = create_radar_chart(ax2, angles, data_demo_player)
             st.pyplot(fig_player)
             st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
