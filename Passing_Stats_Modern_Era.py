@@ -300,36 +300,39 @@ def app():
         user_input_demo_ = st.sidebar.selectbox('Team(s):', sorted_unique_team_)
         st.sidebar.info('Select a team from the left sidebar that you want to view the passing performance from their Quarterback to see how they stacked up for the season!')
 
+        # Create figure based on Team
+        fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
+        ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
+        plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
+        lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
+        ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
+        st.pyplot(fig)
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+
+
     if st.sidebar.checkbox('Player(s)'):
         st.subheader('Player Search:')
         user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)
         st.sidebar.info('Have a certain Quarterback in mind? Select a Quarterback that you want to view the passing performance for to see how they stacked up for the season!')
 
 
-    # Create figure based on Team
-    fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
-    plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get QB data
-    lar_data_demo = get_qb_data(stats_data_categories, user_input_demo_)# Plot QB data
-    ax1 = create_radar_chart(ax1, angles, lar_data_demo, team_colors[user_input_demo_])
-    st.pyplot(fig)
-    st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
 
 
-    # Unique Player Create Figure
-    fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
-    ax2 = fig_player.add_subplot(222, projection='polar', facecolor='#ededed')
-    lar_data_demo1 = get_qb_player_data(stats_data_categories, user_input_demo_player_)# Plot QB data
-    
-    if user_input_demo_player_:
-        if st.sidebar.checkbox('Custom Color'):
-            st.info('You can type in a color to customize the radar chart to your liking. Blue, Teal, Red perhaps? Just enter it to give it a try. Note: The default color is blue if text is left empty.')
-            custom_color = st.sidebar.text_input("Enter a custom color for chart")
-            if not custom_color:
-                default = 'blue'
-                custom_color=default
-            ax2 = create_radar_chart(ax2, angles, lar_data_demo1, color=custom_color)
-        else:
-            ax2 = create_radar_chart(ax2, angles, lar_data_demo1)
-        st.pyplot(fig_player)
-        st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
+
+        # Unique Player Create Figure
+        fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
+        ax2 = fig_player.add_subplot(222, projection='polar', facecolor='#ededed')
+        lar_data_demo1 = get_qb_player_data(stats_data_categories, user_input_demo_player_)# Plot QB data
+        
+        if user_input_demo_player_:
+            if st.sidebar.checkbox('Custom Color'):
+                st.info('You can type in a color to customize the radar chart to your liking. Blue, Teal, Red perhaps? Just enter it to give it a try. Note: The default color is blue if text is left empty.')
+                custom_color = st.sidebar.text_input("Enter a custom color for chart")
+                if not custom_color:
+                    default = 'blue'
+                    custom_color=default
+                ax2 = create_radar_chart(ax2, angles, lar_data_demo1, color=custom_color)
+            else:
+                ax2 = create_radar_chart(ax2, angles, lar_data_demo1)
+            st.pyplot(fig_player)
+            st.write('As displayed above, the main points of emphasis that I have selected to compare for the quarterbacks in regards to the passing game are: Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR. The great the height and shape of one category, the better the player was in that.')
