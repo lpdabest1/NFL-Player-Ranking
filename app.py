@@ -7,7 +7,7 @@ import Passing_Stats_Passer_Rating_Era_Players
 # Page Configuration
 st.set_page_config(
     page_title="NFL Position Performance Metrics",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded",
 )
 
@@ -23,3 +23,6 @@ page = Pages[selection]
 
 if page:
     page.app()
+
+
+
