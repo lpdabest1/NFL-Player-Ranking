@@ -19,7 +19,7 @@ def app():
 
     st.markdown("""
     This app performs simple webscraping of NFL Football player stats data and creates a radar chart that we will be using as a common metric in order to have a visual representation of the performance done 
-    by each team (according to the rushing category)!
+    by each team (according to the receiving category)!
     * **Python libraries:** pandas, streamlit, numpy, matplotlib, pillow, beautifulsoup4
     * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
     Data is from 1950 to 2021.
@@ -30,10 +30,10 @@ def app():
     # calculating current nfl season as most recent season available to scrape
     current_season = 2022
     st.sidebar.header('User Customization')
-    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,current_season))))
+    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,current_season))))
 
     @st.cache
-    def scraping_rushing_Stats(selected_year):
+    def scraping_receiving_Stats(selected_year):
         players = []
 
 
@@ -72,43 +72,43 @@ def app():
                         games_played_search = i.find('td',{'data-stat':'gs'})
                         games_played = games_played_search.text     
 
-                        '''Rush Attempts of Player Collected'''
-                        rush_attempts_search = i.find('td',{'data-stat':'rush_att'})
-                        rush_attempts_data = rush_attempts_search.text        
+                        '''Receptions of Player Collected'''
+                        rec_search = i.find('td',{'data-stat':'rec'})
+                        rec_data = rec_search.text        
     
-                        '''Rush Yards of Player Collected'''
-                        rush_yards_search = i.find('td',{'data-stat':'rush_yds'})
-                        rush_yards_data = rush_yards_search.text       
+                        '''Receiving Yards of Player Collected'''
+                        rec_yards_search = i.find('td',{'data-stat':'rec_yds'})
+                        rec_yards_data = rec_yards_search.text       
 
 
-                        '''Rush TD of Player Collected'''
-                        rush_td_search = i.find('td',{'data-stat':'rush_td'})
-                        rush_td_data = rush_td_search.text         
+                        '''Receiving Yards Per Reception Player Collected'''
+                        rec_yards_per_rec_search = i.find('td',{'data-stat':'rec_yds_per_rec'})
+                        rec_yards_per_rec_data = rec_yards_per_rec_search.text         
 
 
-                        '''Rush Long of Player Collected'''
-                        rush_long_search = i.find('td',{'data-stat':'rush_long'})
-                        rush_long_data = rush_long_search.text         
+                        '''Receiving TDs of Player Collected'''
+                        rec_td_search = i.find('td',{'data-stat':'rec_td'})
+                        rec_td_data = rec_td_search.text         
 
 
-                        '''Rush Yards Per Attempt of Player Collected'''
-                        rush_yards_per_att_search = i.find('td',{'data-stat':'rush_yds_per_att'})
-                        rush_yards_per_att_data = rush_yards_per_att_search.text
+                        '''Rec Long of Player Collected'''
+                        rec_long_search = i.find('td',{'data-stat':'rec_long'})
+                        rec_long_data = rec_long_search.text
                     
 
-                        '''Rush Yards Per Game of Player Collected'''
-                        rush_yards_per_game_search = i.find('td',{'data-stat':'rush_yds_per_g'})
-                        rush_yards_per_game_data = rush_yards_per_game_search.text
+                        '''Rec Per Game of Player Collected'''
+                        rec_per_game_search = i.find('td',{'data-stat':'rec_per_g'})
+                        rec_per_game_data = rec_per_game_search.text
 
-                        '''Fumbles of Player Collected'''
-                        fumbles_search = i.find('td',{'data-stat':'fumbles'})
-                        fumbles_data = fumbles_search.text
+                        '''Rec Yards Per Game of Player Collected'''
+                        rec_yds_per_game_search = i.find('td',{'data-stat':'rec_yds_per_g'})
+                        rec_yds_per_game_data = rec_yds_per_game_search.text
 
                         #Formatting Data Collected
                         player = { "Player": names, "Team": team, "Age": age, "Games Played": games, "Games Started": games_played, 
-                                   "Rush Attempts": rush_attempts_data, "Rushing Yards": rush_yards_data, "Rush TD": rush_td_data,
-                                   "Longest Run": rush_long_data, "Yards per Attempt": rush_yards_per_att_data, "Yards per Game": rush_yards_per_game_data, 
-                                   "Fumbles": fumbles_data
+                                   "Receptions": rec_data, "Receiving Yards": rec_yards_data, "Receiving Yards Per Catch": rec_yards_per_rec_data,
+                                   "Receiving TD": rec_td_data, "Reception Long": rec_long_data, "Receptions Per Game": rec_per_game_data, 
+                                   "Receiving Yards Per Game": rec_yds_per_game_data
                                 }
                         #Appending Each player to Players List
                         players.append(player)
@@ -126,24 +126,24 @@ def app():
         df = pd.DataFrame(players)
         #print(df)
         return df
-    df = scraping_rushing_Stats(selected_year)
+    df = scraping_receiving_Stats(selected_year)
 
 
-    st.header('Rushing Statistics')
-    st.subheader('NFL Season ' + str(selected_year) + ' Rushing Statistics')
+    st.header('Receiving Statistics')
+    st.subheader('NFL Season ' + str(selected_year) + ' Receiving Statistics')
 
     st.dataframe(df)
 
 
-    df.rename(columns={'Rush Attempts': 'Att',
-    'Rushing Yards': 'Rush Yds', 'Yards per Attempt': 'Yds/Att', "Yards per Game": 'Yds/G', "Fumbles": 'Fmb'}, inplace= True)
+    df.rename(columns={'Receptions': 'Rec',
+    'Receiving Yards': 'Rec Yds', 'Receiving Yards per Catch': 'Yds/Rec', "Receiving TD": 'Rec TD', "Receptions Per Game ": 'Rec/G', "Receiving Yards Per Game": "Yds/G"}, inplace= True)
     #print(df)
 
     #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
     #   This is where I found a template for how to generate radar charts for comparing nfl quarterbacks
 
 
-    stat_categories = ['Att','Rush Yds','Rush TD','Yds/Att','Yds/G']
+    stat_categories = ['Rec','Rec Yds','Rec TD','Yds/Rec','Rec/G','Yds/G']
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
 
@@ -157,9 +157,6 @@ def app():
     # Create rankings for stat categories
     for i in stat_categories:
         stats_data_categories[i + ' Rank'] = stats_data_categories[i].rank(pct=True)
-
-    # reverse the stats of ascension sort for interceptions stat category
-    #stats_data_categories['Fmb Rank'] = (1 - stats_data_categories['Fmb Rank'])
 
     # Viewing our updated stats DataFrame
     #print(stats_data_categories.head)
@@ -180,7 +177,7 @@ def app():
                 'San Francisco 49ers':'#aa0000', 'Seattle Seahawks':'#002244', 'Tampa Bay Buccaneers':'#d50a0a', 'Tennessee Titans':'#0c2340', 'Washington Football Team':'#773141'}
 
     # Calculate angles for radar chart
-    offset = np.pi/12
+    offset = np.pi/6
     angles = np.linspace(0, 2*np.pi, len(stat_categories) + 1) + offset
 
     def create_radar_chart(ax, angles, player_data, color='blue'):
@@ -207,11 +204,11 @@ def app():
 
         return ax
 
-    # Function to get QB data
-    def get_rb_data(data, team):
+    # Function to get Receiving data
+    def get_rec_data(data, team):
         return np.asarray(data[data['Team'] == team])[0]
 
-    def get_rb_player_data(data, player):
+    def get_rec_player_data(data, player):
         return np.asarray(data[data['Player'] == player])[0]
 
 
@@ -222,26 +219,26 @@ def app():
 
 
     st.title('Performance Charts')
-    st.info('Both the Team and Player Checkboxes under Chart Preferences on the left sidebar provide customization for which way you would like to view the rushing performance charts. The two options are either by Team or by Player. The choice is yours.')
+    st.info('Both the Team and Player Checkboxes under Chart Preferences on the left sidebar provide customization for which way you would like to view the receiving performance charts. The two options are either by Team or by Player. The choice is yours.')
 
 
     st.sidebar.subheader('Chart Perference(s):')
     if st.sidebar.checkbox('Team(s)'):
-        st.subheader('Team Rushing Performance:')
+        st.subheader('Team Receiving Performance:')
         user_input_demo_ = st.sidebar.selectbox('Team(s):', sorted_unique_team_)
-        st.sidebar.info('Select a team from the left sidebar that you want to view the rushing performance from their best rusher to see how they stacked up for the season!')
+        st.sidebar.info('Select a team from the left sidebar that you want to view the receiving performance from their best receiver to see how they stacked up for the season!')
 
         # Create figure based on Team #################################################################################################
         fig = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
         ax1 = fig.add_subplot(221, projection='polar', facecolor='#ededed')
         plt.subplots_adjust(hspace=0.8, wspace=0.5)# Get RB data
-        data_demo = get_rb_data(stats_data_categories, user_input_demo_)# Plot RB data
+        data_demo = get_rec_data(stats_data_categories, user_input_demo_)# Plot RB data
         if user_input_demo_ not in team_colors:
             ax1 = create_radar_chart(ax1, angles, data_demo, color='grey')
         else:
             ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
         st.pyplot(fig)
-        st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the running game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the receivers in regards to the receiving game are: Rec, Rec Yds, Rec TD, Yds/Rec, Rec/G, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
         
         # DataFrame for Team Rushing Rankings
         Team_Ranks_df = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_]
@@ -256,12 +253,12 @@ def app():
     if st.sidebar.checkbox('Player(s)'):
         st.subheader('Player Search:')
         user_input_demo_player_ = st.sidebar.selectbox('Player(s):', sorted_unique_players_)
-        st.sidebar.info('Have a certain rusher in mind? Select a player that you want to view the rushing performance for to see how they stacked up for the season!')
+        st.sidebar.info('Have a certain receiver in mind? Select a player that you want to view the receiving performance for to see how they stacked up for the season!')
 
         # Unique Player Create Figure
         fig_player = plt.figure(figsize=(8, 8), facecolor='white')# Add subplots
         ax2 = fig_player.add_subplot(222, projection='polar', facecolor='#ededed')
-        data_demo_player = get_rb_player_data(stats_data_categories, user_input_demo_player_)# Plot RB data
+        data_demo_player = get_rec_player_data(stats_data_categories, user_input_demo_player_)# Plot RB data
         
         if user_input_demo_player_:
             if st.sidebar.checkbox('Custom Color'):
@@ -274,25 +271,25 @@ def app():
             else:
                 ax2 = create_radar_chart(ax2, angles, data_demo_player)
             st.pyplot(fig_player)
-            st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the rushing game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
+            st.write('As displayed above, the main points of emphasis that I have selected to compare for the receivers in regards to the receiving game are: Rec, Rec Yds, Rec TD, Yds/Rec, Rec/G, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
             
             # DataFrame for Team Passing Rankings
             Player_Ranks_df = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_]
-            st.subheader(user_input_demo_player_ + ' Rushing Stats W/ Ranking Percent Per Category')
+            st.subheader(user_input_demo_player_ + ' Receiving Stats W/ Ranking Percent Per Category')
             st.dataframe(Player_Ranks_df)
 
     # Player Comparisons ###################################################################################
     if st.sidebar.checkbox('Player(s) Comparison ** Bonus **'):
-        user_input_demo_player_1 = st.sidebar.selectbox('Rusher 1:', sorted_unique_players_)
-        user_input_demo_player_2 = st.sidebar.selectbox('Rusher 2:', sorted_unique_players_)
-        st.sidebar.info('Have a certain few Rushers in mind? Select two Rushers that you want to view the rushing performance for to see how they stacked up for the season in comparison to each other!')
+        user_input_demo_player_1 = st.sidebar.selectbox('Receiver 1:', sorted_unique_players_)
+        user_input_demo_player_2 = st.sidebar.selectbox('Receiver 2:', sorted_unique_players_)
+        st.sidebar.info('Have a certain few Receivers in mind? Select two Rushers that you want to view the receiving performance for to see how they stacked up for the season in comparison to each other!')
 
         # Unique Two Players Create Figure
         fig_players = plt.figure(figsize=(15, 15), facecolor='white')
         ax_player_1 = fig_players.add_subplot(221, projection='polar', facecolor='#ededed')
         ax_player_2 = fig_players.add_subplot(222, projection='polar', facecolor='#ededed')
-        data_demo_player1 = get_rb_player_data(stats_data_categories, user_input_demo_player_1)
-        data_demo_player2 = get_rb_player_data(stats_data_categories, user_input_demo_player_2)
+        data_demo_player1 = get_rec_player_data(stats_data_categories, user_input_demo_player_1)
+        data_demo_player2 = get_rec_player_data(stats_data_categories, user_input_demo_player_2)
         
         
         if user_input_demo_player_1:
@@ -313,10 +310,10 @@ def app():
             Player_Ranks_1 = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_1]
             Player_Ranks_2 = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_2]
 
-            st.subheader(user_input_demo_player_1 + ' Rushing Stats W/ Ranking Percent Per Category')
+            st.subheader(user_input_demo_player_1 + ' Receiving Stats W/ Ranking Percent Per Category')
             st.dataframe(Player_Ranks_1)
 
-            st.subheader(user_input_demo_player_2 + ' Rushing Stats W/ Ranking Percent Per Category')
+            st.subheader(user_input_demo_player_2 + ' Receiving Stats W/ Ranking Percent Per Category')
             st.dataframe(Player_Ranks_2)
 
 
@@ -324,14 +321,14 @@ def app():
     if st.sidebar.checkbox('Team(s) Comparison ** Bonus **'):
         user_input_demo_team_1 = st.sidebar.selectbox('Team 1:', sorted_unique_team_)
         user_input_demo_team_2 = st.sidebar.selectbox('Team 2:', sorted_unique_team_)
-        st.sidebar.info('Have a certain few Teams in mind? Select two teams that you want to view the rushing performance for to see how they stacked up for the season in comparison to each other!')
+        st.sidebar.info('Have a certain few Teams in mind? Select two teams that you want to view the receiving performance for to see how they stacked up for the season in comparison to each other!')
 
         # Unique Teams Create Figure
         fig_teams = plt.figure(figsize=(15, 15), facecolor='white')
         ax_team_1 = fig_teams.add_subplot(221, projection='polar', facecolor='#ededed')
         ax_team_2 = fig_teams.add_subplot(222, projection='polar', facecolor='#ededed')
-        data_demo_team1 = get_rb_data(stats_data_categories, user_input_demo_team_1)# Plot QB data
-        data_demo_team2 = get_rb_data(stats_data_categories, user_input_demo_team_2)
+        data_demo_team1 = get_rec_data(stats_data_categories, user_input_demo_team_1)# Plot QB data
+        data_demo_team2 = get_rec_data(stats_data_categories, user_input_demo_team_2)
         
         
         if user_input_demo_team_1:
@@ -351,7 +348,7 @@ def app():
                 ax_team_2 = create_radar_chart(ax_team_2, angles, data_demo_team2, team_colors[user_input_demo_team_2])
 
         st.pyplot(fig_teams)
-        st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the rushing game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the receivers in regards to the receiving game are: Rec, Rec Yds, Rec TD, Yds/Rec, Rec/G, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
 
         # DataFrame for Team Rushing Rankings
         Team_Ranks_1 = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_team_1]
@@ -365,19 +362,19 @@ def app():
 
 
     # **************** Ranking(s) **************************************
-    # ['Att','Rush Yds','Rush TD','Yds/Att','Yds/G']
+    # ['Rec','Rec Yds','Rec TD','Yds/Rec','Rec/G','Yds/G']
 
 
-    st.title('Rushing Rankings')
+    st.title('Receiving Rankings')
     st.markdown("""
-    Ranking the Rushers of this season based on the criteria of Rushing Attempts, Rush Yards, Rushing Touchdowns, Yards per Attempt, and Yards per Game!
-    I will use a formula that fits the criteria mentioned to rank the rushers.
+    Ranking the Receivers of this season based on the criteria of Receptions, Receiving Yards, Receiving TD, Receiving Yards Per Reception, Receptions Per Game, Yards Per Game!
+    I will use a formula that fits the criteria mentioned to rank the receivers.
     """)
 
     # Equation for rankings:
-    # Rushing Ranking = (50)Rush Yards + (10)Att + (10)Rush TD + (10)Yds/Att + (10)Yds/G
+    # Receiving Ranking = (50)Rec Yards + (10)Rec + (10)Rec TD + (10)Yds/Rec + (10)Rec/G + (10)Yds/G
 
-    st.latex('Rushing Ranking = (50)Rush Yds + (10)Att + (20)Rush TD + (10)Yds/Att + (10)Yds/G')
+    st.latex('Receiving Ranking = (40)Rec Yds + (15)Rec + (20)Rec TD + (10)Yds/Rec + (5)Rec/G + (10)Yds/G')
 
     if selected_year >= 1932 and selected_year < 1940:
         rankings_df = stats_data_categories.head(15)
@@ -385,39 +382,43 @@ def app():
         rankings_df = stats_data_categories.head(32)
     else:
         rankings_df = stats_data_categories.head(50)
-    st.caption('A DataFrame of the Rushers in regards to Attempts (Depicted Below)')
+    st.caption('A DataFrame of the Receivers in regards to Receptions (Depicted Below)')
     st.dataframe(rankings_df)
 
 
-    # 'Att','Rush Yds','Rush TD','Yds/Att','Yds/G'
+    # ['Rec','Rec Yds','Rec TD','Yds/Rec','Rec/G','Yds/G']
     for i in rankings_df:
-        if i == 'Att Rank':
-            att_perc_type = rankings_df[i].astype(float)
-            att_rank_value = att_perc_type * 10
+        if i == 'Rec Rank':
+            rec_perc_type = rankings_df[i].astype(float)
+            rec_rank_value = rec_perc_type * 15
             #st.write(att_rank_value)
-        if i == 'Rush Yds Rank':
-            rush_yds_type = rankings_df[i].astype(float)
-            rush_yds_rank_value = rush_yds_type * 50
+        if i == 'Rec Yds Rank':
+            rec_yds_type = rankings_df[i].astype(float)
+            rec_yds_rank_value = rec_yds_type * 40
             #st.write(rush_yds_rank_value)
-        if i == 'Rush TD Rank':
-            rush_td_type = rankings_df[i].astype(float)
-            rush_td_value = rush_td_type * 20
+        if i == 'Rec TD Rank':
+            rec_td_type = rankings_df[i].astype(float)
+            rec_td_value = rec_td_type * 20
             #st.write(rush_td_value)
-        if i == 'Yds/Att Rank':
-            yds_att_perc_type = rankings_df[i].astype(float)
-            yds_att_rank_value = yds_att_perc_type * 10
+        if i == 'Yds/Rec Rank':
+            yds_per_rec_perc_type = rankings_df[i].astype(float)
+            yds_per_rec_rank_value = yds_per_rec_perc_type * 10
             #st.write(yds_att_rank_value)
+        if i == 'Rec/G Rank':
+            rec_per_g_type = rankings_df[i].astype(float)
+            rec_per_g_rank_value = rec_per_g_type * 5
+            #st.write(yds_att_rank_value)        
         if i == 'Yds/G Rank':
             yds_g_type = rankings_df[i].astype(float)
             yds_g_rank_value = yds_g_type * 10
             #st.write(yds_g_rank_value)
         
-    rankings_df['Player Rating'] = att_rank_value + rush_yds_rank_value + rush_td_value + yds_att_rank_value + yds_g_rank_value
+    rankings_df['Player Rating'] = rec_rank_value + rec_yds_rank_value + rec_td_value + yds_per_rec_rank_value + rec_per_g_rank_value + yds_g_rank_value
     player_ratings = rankings_df[[ 'Player','Player Rating']]
     player_ratings = player_ratings.sort_values(by=['Player Rating'], ascending=False)
     
-    # Display ratings in descending order for players under the rushing stats category
-    #st.caption('A DataFrame of the Top 32 Rushers sorted by Player Rating, which was calculated based on the Rushing Ranking Formula.')
+    # Display ratings in descending order for players under the receiving stats category
+    #st.caption('A DataFrame of the Top 32 Receivers sorted by Player Rating, which was calculated based on the Receiving Ranking Formula.')
     #st.dataframe(player_ratings)
 
     if selected_year >= 1932 and selected_year < 1940:
