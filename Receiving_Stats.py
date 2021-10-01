@@ -30,14 +30,14 @@ def app():
     # calculating current nfl season as most recent season available to scrape
     current_season = 2022
     st.sidebar.header('User Customization')
-    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,current_season))))
+    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,current_season))))
 
     @st.cache
     def scraping_receiving_Stats(selected_year):
         players = []
 
 
-        url = 'https://www.pro-football-reference.com/years/'+ str(selected_year) + '/rushing.htm'
+        url = 'https://www.pro-football-reference.com/years/'+ str(selected_year) + '/receiving.htm'
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'}
         page = requests.get(url,headers=headers, timeout=2, allow_redirects = True )
         soup = bs(page.content, 'html.parser')
