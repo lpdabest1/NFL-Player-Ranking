@@ -136,7 +136,7 @@ def app():
 
 
     df.rename(columns={'Receptions': 'Rec',
-    'Receiving Yards': 'Rec Yds', 'Receiving Yards per Catch': 'Yds/Rec', "Receiving TD": 'Rec TD', "Receptions Per Game ": 'Rec/G', "Receiving Yards Per Game": "Yds/G"}, inplace= True)
+    'Receiving Yards': 'Rec Yds', 'Receiving Yards Per Catch': 'Yds/Rec', "Receiving TD": 'Rec TD', "Receptions Per Game ": 'Rec/G', "Receiving Yards Per Game": "Yds/G"}, inplace= True)
     #print(df)
 
     #   Naveen Venkatesan --> Data Scientist url:https://towardsdatascience.com/scraping-nfl-stats-to-compare-quarterback-efficiencies-4989642e02fe
