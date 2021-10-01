@@ -28,12 +28,12 @@ def app():
 
 
     # calculating current nfl season as most recent season available to scrape
-    current_season = 2022
+    current_season = 2006
     st.sidebar.header('User Customization')
-    selected_year = st.sidebar.selectbox('Year', list(reversed(range(2006,current_season))))
+    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,current_season))))
 
     @st.cache
-    def scraping_2021_QB_Stats(selected_year):
+    def scraping_past_QB_Stats(selected_year):
         players = []
 
 
@@ -74,12 +74,7 @@ def app():
                         games = games_search.text
 
                         games_played_search = i.find('td',{'data-stat':'gs'})
-                        games_played = games_played_search.text
-    
-                        '''QB Record and Percentage Wins for Players Collected'''
-                        qbRec_search = i.find('td',{'data-stat':'qb_rec'})
-                        qbRec_percentage = qbRec_search['csk']
-                        qbRec = qbRec_search.text       
+                        games_played = games_played_search.text     
 
                         '''Passes Completed of Player Collected'''
                         passes_completed_search = i.find('td',{'data-stat':'pass_cmp'})
@@ -117,11 +112,7 @@ def app():
                         '''Interception Percentage of Player Collected'''
                         interception_percentage_search = i.find('td',{'data-stat':'pass_int_perc'})
                         interception_percentage = interception_percentage_search.text
-
-
-                        '''First Downs of Player Collected'''
-                        firstdowns_search = i.find('td',{'data-stat':'pass_first_down'})
-                        firstdowns = firstdowns_search.text        
+      
 
                         '''Longest Pass of Player Collected'''
                         pass_long_search = i.find('td',{'data-stat':'pass_long'})
@@ -153,32 +144,12 @@ def app():
                         passer_rating = passer_rating_search.text
 
 
-                        '''QBR'''
-                        qbr_search = i.find('td',{'data-stat':'qbr'})
-                        qbr = qbr_search.text
-
-
-                        '''Sacks'''
-                        sacks_taken_search = i.find('td',{'data-stat':'pass_sacked'})
-                        sacks_taken = sacks_taken_search.text
-
-
-                        '''Sack Percentage'''
-                        sacks_taken_percentage_search = i.find('td',{'data-stat':'pass_sacked_perc'})
-                        sacks_taken_percentage = sacks_taken_percentage_search.text
-        
-
-                        '''Sack Yards Loss'''
-                        sack_yards_search = i.find('td',{'data-stat':'pass_sacked_yds'})
-                        sack_yards = sack_yards_search.text
-
-
                         #Formatting Data Collected
-                        player = { "Player": names, "Team": team, "Age": age, "Games Played": games, "Games Started": games_played, "QB-Record": qbRec, "QB Wins Percentage": qbRec_percentage,
+                        player = { "Player": names, "Team": team, "Age": age, "Games Played": games, "Games Started": games_played, 
                     "Passes Completed": passes_completed, "Passes Attempted": passes_attempted, "Completion Percentage": completion_percentage, "Passing Yards": passing_yards, "Passing Touchdowns": passing_touchdowns,
-                    "Touchdown Percentage": touchdown_percentage, "Interceptions": interceptions, "Interceptions Percentage": interception_percentage, "First Downs": firstdowns, "Longest Pass": pass_long,
+                    "Touchdown Percentage": touchdown_percentage, "Interceptions": interceptions, "Interceptions Percentage": interception_percentage, "Longest Pass": pass_long,
                     "Yards Per Attempt": yards_per_attempt, "Adjusted Yards Per Attempt": adj_yards_per_attempt, "Yards per Completion": yards_per_completion, "Yards Per Game": yards_per_game,
-                    "Passer Rating": passer_rating, "QBR": qbr, "Times Sacked": sacks_taken, "Sacked Percentage": sacks_taken_percentage, "Yards Loss (Sack)": sack_yards}
+                    "Passer Rating": passer_rating}
                         #Appending Each player to Players List
                         players.append(player)
             
@@ -193,10 +164,9 @@ def app():
 
 
         df = pd.DataFrame(players)
-        df.to_csv("NFL_Player_QB_Search_without_image.csv")
         #print(df)
         return df
-    df = scraping_2021_QB_Stats(selected_year)
+    df = scraping_past_QB_Stats(selected_year)
 
 
     st.header('Quarterback Passing Statistics')
@@ -215,7 +185,7 @@ def app():
     # Cmp%, Pass Yds, Passing TDs, TD%, INT, INT%, QBR
 
     #stat_categories = ['Completion Percentage','Passing Yards','Passing Touchdowns','Touchdown Percentage','Interceptions','QBR']
-    stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT%','QBR']
+    stat_categories = ['Cmp%','Pass Yds','Pass TD','TD%','INT%','Passer Rating']
     #stats_data_categories_rankings = df['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
@@ -440,13 +410,6 @@ def app():
 
     # **************** Ranking(s) **************************************
     # ['Cmp%','Pass Yds','Pass TD','TD%','INT','QBR']
-    means_rankings = []
-    mean_cmp = stats_data_categories['Cmp%'].mean()
-    mean_pass_yds = stats_data_categories['Pass Yds'].mean()
-    mean_pass_td = stats_data_categories['Pass TD'].mean()
-    mean_pass_td_percent = stats_data_categories['TD%'].mean()
-    mean_int_percent = stats_data_categories['INT%'].mean()
-    mean_qbr = stats_data_categories['QBR'].mean()
 
 
     st.title('Quarterback Rankings')
@@ -456,12 +419,17 @@ def app():
     """)
 
     # Equation for rankings:
-    # QB Ranking = (50)QBR + (50)Cmp% + (50)Pass Yds + (50)Pass TD + (50)TD% + (50)INT%
+    # QB Ranking = (50)QBR + (10)Cmp% + (10)Pass Yds + (10)Pass TD + (10)TD% + (10)INT%
 
-    st.latex('QB Ranking = (50)QBR + (10)Cmp Percentage + (10)Pass Yds + (10)Pass TD + (10)Pass TD Percentage + (10)INT Percentage')
+    st.latex('QB Ranking = (50)Passer Rating + (10)Cmp Percentage + (10)Pass Yds + (10)Pass TD + (10)Pass TD Percentage + (10)INT Percentage')
 
-    rankings_df = stats_data_categories.head(32)
-    st.caption('A DataFrame of the Top 32 Quarterbacks in regards to Passing Yards (Depicted Below)')
+    if selected_year >= 1950 and selected_year < 1960:
+        rankings_df = stats_data_categories.head(15)
+    if selected_year >= 1960 and selected_year < 1969:
+        rankings_df = stats_data_categories.head(20)
+    else:
+        rankings_df = stats_data_categories.head(32)
+    st.caption('A DataFrame of the Quarterbacks in regards to Passing Yards (Depicted Below)')
     st.dataframe(rankings_df)
 
     for i in rankings_df:
@@ -485,12 +453,12 @@ def app():
             int_perc_type = rankings_df[i].astype(float)
             int_perc_rank_value = int_perc_type * 10
             #st.write(int_perc_rank_value)
-        if i == 'QBR Rank':
-            QBR_type = rankings_df[i].astype(float)
-            QBR_rank_value = QBR_type * 50
+        if i == 'Passer Rating Rank':
+            passer_rating_type = rankings_df[i].astype(float)
+            passer_rating_rank_value = passer_rating_type * 50
             #st.write(QBR_rank_value)
         
-    rankings_df['Player Rating'] = cmp_rank_value + pass_yds_rank_value + pass_td_value + td_perc_rank_value + int_perc_rank_value + QBR_rank_value
+    rankings_df['Player Rating'] = cmp_rank_value + pass_yds_rank_value + pass_td_value + td_perc_rank_value + int_perc_rank_value + passer_rating_rank_value
     player_ratings = rankings_df[[ 'Player','Player Rating']]
     player_ratings = player_ratings.sort_values(by=['Player Rating'], ascending=False)
     
@@ -498,26 +466,52 @@ def app():
     #st.caption('A DataFrame of the Top 32 Quarterbacks sorted by Player Rating, which was calculated based on the QBRanking Formula.')
     #st.dataframe(player_ratings)
 
-    
-    # Making the dataframe(s) based on top, middle, bottom classifications prettier
-    col1, col2, col3 = st.columns(3)
-    
-    # Top 10 Quarterbacks 
-    col1.subheader('Top 10 Rated Quarterbacks')
-    top = player_ratings.head(10)
-    col1.dataframe(top)
-    #st.dataframe(player_ratings.head(10))
+    if selected_year >= 1950 and selected_year < 1960:
+        col1, col2 = st.columns(2)
+        # Top 10 Quarterbacks 
+        col1.subheader('Top 10 Rated Quarterbacks')
+        top = player_ratings.head(10)
+        col1.dataframe(top)
 
-    # Average (Middle of The Pack) Quarterbacks
-    col2.subheader('"Middle Of The Pack" Rated Quarterbacks')
-    middle = player_ratings[10:22]
-    col2.dataframe(middle)
-    #st.dataframe(player_ratings[10:22])   
+        # Bottom 10 Quarterbacks 
+        col2.subheader('Bottom 10 Rated Quarterbacks')
+        bottom = player_ratings.tail(10)
+        col2.dataframe(bottom)
 
-    # Bottom 10 Quarterbacks 
-    col3.subheader('Bottom 10 Rated Quarterbacks')
-    bottom = player_ratings.tail(10)
-    col3.dataframe(bottom)
-    #st.dataframe(player_ratings.tail(10))
+    if selected_year >= 1960 and selected_year < 1969:
+        col1, col2 = st.columns(2)
+        # Top 10 Quarterbacks 
+        col1.subheader('Top 10 Rated Quarterbacks')
+        top = player_ratings.head(10)
+        col1.dataframe(top)
+
+        # Bottom 10 Quarterbacks 
+        col2.subheader('Bottom 10 Rated Quarterbacks')
+        bottom = player_ratings.tail(10)
+        col2.dataframe(bottom)
+
+
+    else:
+
+        # Making the dataframe(s) based on top, middle, bottom classifications prettier
+        col1, col2, col3 = st.columns(3)
+        
+        # Top 10 Quarterbacks 
+        col1.subheader('Top 10 Rated Quarterbacks')
+        top = player_ratings.head(10)
+        col1.dataframe(top)
+        #st.dataframe(player_ratings.head(10))
+
+        # Average (Middle of The Pack) Quarterbacks
+        col2.subheader('"Middle Of The Pack" Rated Quarterbacks')
+        middle = player_ratings[10:22]
+        col2.dataframe(middle)
+        #st.dataframe(player_ratings[10:22])   
+
+        # Bottom 10 Quarterbacks 
+        col3.subheader('Bottom 10 Rated Quarterbacks')
+        bottom = player_ratings.tail(10)
+        col3.dataframe(bottom)
+        #st.dataframe(player_ratings.tail(10))
 
     
