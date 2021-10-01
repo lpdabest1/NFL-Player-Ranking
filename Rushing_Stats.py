@@ -377,7 +377,7 @@ def app():
     # Equation for rankings:
     # Rushing Ranking = (50)Rush Yards + (10)Att + (10)Rush TD + (10)Yds/Att + (10)Yds/G + (10)Fmb
 
-    st.latex('Rushing Ranking = (50)Rush Yds + (10)Att + (10)Rush TD + (10)Yds/Att + (10)Yds/G + (10)Fmb')
+    st.latex('Rushing Ranking = (50)Rush Yds + (10)Att + (15)Rush TD + (10)Yds/Att + (10)Yds/G + (5)Fmb')
 
     if selected_year >= 1932 and selected_year < 1940:
         rankings_df = stats_data_categories.head(15)
@@ -401,7 +401,7 @@ def app():
             #st.write(rush_yds_rank_value)
         if i == 'Rush TD Rank':
             rush_td_type = rankings_df[i].astype(float)
-            rush_td_value = rush_td_type * 10
+            rush_td_value = rush_td_type * 15
             #st.write(rush_td_value)
         if i == 'Yds/Att Rank':
             yds_att_perc_type = rankings_df[i].astype(float)
@@ -413,7 +413,7 @@ def app():
             #st.write(yds_g_rank_value)
         if i == 'Fmb Rank':
             fmb_type = rankings_df[i].astype(float)
-            fmb_rank_value = fmb_type * 10
+            fmb_rank_value = fmb_type * 5
             #st.write(fmb_rank_value)
         
     rankings_df['Player Rating'] = att_rank_value + rush_yds_rank_value + rush_td_value + yds_att_rank_value + yds_g_rank_value + fmb_rank_value
