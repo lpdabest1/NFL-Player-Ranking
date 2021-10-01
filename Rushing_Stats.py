@@ -180,7 +180,7 @@ def app():
                 'San Francisco 49ers':'#aa0000', 'Seattle Seahawks':'#002244', 'Tampa Bay Buccaneers':'#d50a0a', 'Tennessee Titans':'#0c2340', 'Washington Football Team':'#773141'}
 
     # Calculate angles for radar chart
-    offset = np.pi/8
+    offset = np.pi/12
     angles = np.linspace(0, 2*np.pi, len(stat_categories) + 1) + offset
 
     def create_radar_chart(ax, angles, player_data, color='blue'):
@@ -241,7 +241,7 @@ def app():
         else:
             ax1 = create_radar_chart(ax1, angles, data_demo, team_colors[user_input_demo_])
         st.pyplot(fig)
-        st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the running game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G, Fmb. The greater the height and shape of one category, the better the player was in that category.')
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the running game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
         
         # DataFrame for Team Rushing Rankings
         Team_Ranks_df = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_]
@@ -274,7 +274,7 @@ def app():
             else:
                 ax2 = create_radar_chart(ax2, angles, data_demo_player)
             st.pyplot(fig_player)
-            st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the rushing game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G, Fmb. The greater the height and shape of one category, the better the player was in that category.')
+            st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the rushing game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
             
             # DataFrame for Team Passing Rankings
             Player_Ranks_df = stats_data_categories.loc[stats_data_categories['Player']==user_input_demo_player_]
@@ -351,7 +351,7 @@ def app():
                 ax_team_2 = create_radar_chart(ax_team_2, angles, data_demo_team2, team_colors[user_input_demo_team_2])
 
         st.pyplot(fig_teams)
-        st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the rushing game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G, Fmb. The greater the height and shape of one category, the better the player was in that category.')
+        st.write('As displayed above, the main points of emphasis that I have selected to compare for the rushers in regards to the rushing game are: Att, Rush Yds, Rush TD, Yds/Att, Yds/G. The greater the height and shape of one category, the better the player was in that category.')
 
         # DataFrame for Team Rushing Rankings
         Team_Ranks_1 = stats_data_categories.loc[stats_data_categories['Team']==user_input_demo_team_1]
@@ -365,7 +365,7 @@ def app():
 
 
     # **************** Ranking(s) **************************************
-    # ['Att','Rush Yds','Rush TD','Yds/Att','Yds/G','Fmb']
+    # ['Att','Rush Yds','Rush TD','Yds/Att','Yds/G']
 
 
     st.title('Rushing Rankings')
@@ -375,7 +375,7 @@ def app():
     """)
 
     # Equation for rankings:
-    # Rushing Ranking = (50)Rush Yards + (10)Att + (10)Rush TD + (10)Yds/Att + (10)Yds/G + (10)Fmb
+    # Rushing Ranking = (50)Rush Yards + (10)Att + (10)Rush TD + (10)Yds/Att + (10)Yds/G
 
     st.latex('Rushing Ranking = (50)Rush Yds + (10)Att + (20)Rush TD + (10)Yds/Att + (10)Yds/G')
 
@@ -389,7 +389,7 @@ def app():
     st.dataframe(rankings_df)
 
 
-    # 'Att','Rush Yds','Rush TD','Yds/Att','Yds/G','Fmb'
+    # 'Att','Rush Yds','Rush TD','Yds/Att','Yds/G'
     for i in rankings_df:
         if i == 'Att Rank':
             att_perc_type = rankings_df[i].astype(float)
