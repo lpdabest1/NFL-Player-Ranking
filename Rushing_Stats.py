@@ -143,7 +143,7 @@ def app():
     #   This is where I found a template for how to generate radar charts for comparing nfl quarterbacks
 
 
-    stat_categories = ['Att','Rush Yds','Rush TD','Yds/Att','Yds/G','Fmb']
+    stat_categories = ['Att','Rush Yds','Rush TD','Yds/Att','Yds/G']
 
     stats_data_categories = df[['Player','Team'] + stat_categories] 
 
@@ -180,7 +180,7 @@ def app():
                 'San Francisco 49ers':'#aa0000', 'Seattle Seahawks':'#002244', 'Tampa Bay Buccaneers':'#d50a0a', 'Tennessee Titans':'#0c2340', 'Washington Football Team':'#773141'}
 
     # Calculate angles for radar chart
-    offset = np.pi/6
+    offset = np.pi/5
     angles = np.linspace(0, 2*np.pi, len(stat_categories) + 1) + offset
 
     def create_radar_chart(ax, angles, player_data, color='blue'):
@@ -370,14 +370,14 @@ def app():
 
     st.title('Rushing Rankings')
     st.markdown("""
-    Ranking the Rushers of this season based on the criteria of Rushing Attempts, Rush Yards, Rushing Touchdowns, Yards per Attempt, Yards per Game, and Fumbles!
+    Ranking the Rushers of this season based on the criteria of Rushing Attempts, Rush Yards, Rushing Touchdowns, Yards per Attempt, and Yards per Game!
     I will use a formula that fits the criteria mentioned to rank the rushers.
     """)
 
     # Equation for rankings:
     # Rushing Ranking = (50)Rush Yards + (10)Att + (10)Rush TD + (10)Yds/Att + (10)Yds/G + (10)Fmb
 
-    st.latex('Rushing Ranking = (50)Rush Yds + (10)Att + (15)Rush TD + (10)Yds/Att + (10)Yds/G + (5)Fmb')
+    st.latex('Rushing Ranking = (50)Rush Yds + (10)Att + (20)Rush TD + (10)Yds/Att + (10)Yds/G')
 
     if selected_year >= 1932 and selected_year < 1940:
         rankings_df = stats_data_categories.head(15)
@@ -401,7 +401,7 @@ def app():
             #st.write(rush_yds_rank_value)
         if i == 'Rush TD Rank':
             rush_td_type = rankings_df[i].astype(float)
-            rush_td_value = rush_td_type * 15
+            rush_td_value = rush_td_type * 20
             #st.write(rush_td_value)
         if i == 'Yds/Att Rank':
             yds_att_perc_type = rankings_df[i].astype(float)
@@ -411,12 +411,8 @@ def app():
             yds_g_type = rankings_df[i].astype(float)
             yds_g_rank_value = yds_g_type * 10
             #st.write(yds_g_rank_value)
-        if i == 'Fmb Rank':
-            fmb_type = rankings_df[i].astype(float)
-            fmb_rank_value = fmb_type * 5
-            #st.write(fmb_rank_value)
         
-    rankings_df['Player Rating'] = att_rank_value + rush_yds_rank_value + rush_td_value + yds_att_rank_value + yds_g_rank_value + fmb_rank_value
+    rankings_df['Player Rating'] = att_rank_value + rush_yds_rank_value + rush_td_value + yds_att_rank_value + yds_g_rank_value
     player_ratings = rankings_df[[ 'Player','Player Rating']]
     player_ratings = player_ratings.sort_values(by=['Player Rating'], ascending=False)
     
