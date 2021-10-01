@@ -424,53 +424,53 @@ def app():
     if selected_year >= 1932 and selected_year < 1940:
         col1, col2 = st.columns(2)
         # Top 10 Rushers 
-        col1.subheader('Top 5 Rated Rushers')
+        col1.subheader('Top 5 Rated Receivers')
         top = player_ratings.head(5)
         col1.dataframe(top)
 
         # Bottom 10 Rushers 
-        col2.subheader('Bottom 10 Rated Rushers')
+        col2.subheader('Bottom 10 Rated Receivers')
         bottom = player_ratings.tail(10)
         col2.dataframe(bottom)
 
     if selected_year >= 1940 and selected_year < 1950:
         col1, col2, col3 = st.columns(3)
         # Top 10 Rushers 
-        col1.subheader('Top 10 Rated Rushers')
+        col1.subheader('Top 10 Rated Receivers')
         top = player_ratings.head(10)
         col1.dataframe(top)
 
         # Average (Middle of The Pack) Rushers
-        col2.subheader('"Middle Of The Pack" Rated Rushers')
+        col2.subheader('"Middle Of The Pack" Rated Receivers')
         middle = player_ratings[10:22]
         col2.dataframe(middle)
         #st.dataframe(player_ratings[10:22])
 
         # Bottom 10 Rushers 
-        col2.subheader('Bottom 10 Rated Rushers')
+        col2.subheader('Bottom 10 Rated Receivers')
         bottom = player_ratings.tail(10)
         col2.dataframe(bottom)
 
 
-    else:
+    if selected_year >= 1950:
 
         # Making the dataframe(s) based on top, middle, bottom classifications prettier
         col1, col2, col3 = st.columns(3)
         
         # Top 10 Rushers 
-        col1.subheader('Top 10 Rated Rushers')
+        col1.subheader('Top 10 Rated Receivers')
         top = player_ratings.head(10)
         col1.dataframe(top)
         #st.dataframe(player_ratings.head(10))
 
         # Average (Middle of The Pack) Rushers
-        col2.subheader('"Middle Of The Pack" Rated Rushers')
+        col2.subheader('"Middle Of The Pack" Rated Receivers')
         middle = player_ratings[10:40]
         col2.dataframe(middle)
         #st.dataframe(player_ratings[10:22])   
 
         # Bottom 10 Rushers 
-        col3.subheader('Bottom 10 Rated Rushers')
+        col3.subheader('Bottom 10 Rated Receivers')
         bottom = player_ratings.tail(10)
         col3.dataframe(bottom)
         #st.dataframe(player_ratings.tail(10))
