@@ -159,7 +159,7 @@ def app():
         stats_data_categories[i + ' Rank'] = stats_data_categories[i].rank(pct=True)
 
     # reverse the stats of ascension sort for interceptions stat category
-    stats_data_categories['Fmb Rank'] = (1 - stats_data_categories['Fmb Rank'])
+    #stats_data_categories['Fmb Rank'] = (1 - stats_data_categories['Fmb Rank'])
 
     # Viewing our updated stats DataFrame
     #print(stats_data_categories.head)
