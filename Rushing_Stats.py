@@ -180,7 +180,7 @@ def app():
                 'San Francisco 49ers':'#aa0000', 'Seattle Seahawks':'#002244', 'Tampa Bay Buccaneers':'#d50a0a', 'Tennessee Titans':'#0c2340', 'Washington Football Team':'#773141'}
 
     # Calculate angles for radar chart
-    offset = np.pi/7
+    offset = np.pi/8
     angles = np.linspace(0, 2*np.pi, len(stat_categories) + 1) + offset
 
     def create_radar_chart(ax, angles, player_data, color='blue'):
