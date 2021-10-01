@@ -30,7 +30,7 @@ def app():
     # calculating current nfl season as most recent season available to scrape
     current_season = 2022
     st.sidebar.header('User Customization')
-    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,current_season))))
+    selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,current_season))))
 
     @st.cache
     def scraping_receiving_Stats(selected_year):
