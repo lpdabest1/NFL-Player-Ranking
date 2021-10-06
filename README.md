@@ -1,2 +1,2 @@
-# NFL Player Search
- An application that allows users to search for current NFL Players and retrieve data and information about them.
+# NFL Player Ranking
+ A custom player ranking(s) web application that ranks players for a specified season/year under the categories of passing. rushing, and receiving. 
