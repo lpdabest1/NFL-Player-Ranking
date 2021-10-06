@@ -5,6 +5,7 @@ import Passing_Stats_Past_Era
 import Rushing_Stats
 import Receiving_Stats
 
+
 # Page Configuration
 st.set_page_config(
     page_title="NFL Position Performance Metrics",

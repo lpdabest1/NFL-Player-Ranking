@@ -179,7 +179,7 @@ def app():
 
 
         df = pd.DataFrame(players)
-        df.to_csv("NFL_Player_QB_Search_Passer_Rating_Era.csv")
+        #df.to_csv("NFL_Player_QB_Search_Passer_Rating_Era.csv")
         #print(df)
         return df
     df = scraping_QB_Stats(selected_year)
@@ -214,7 +214,7 @@ def app():
                             player_link = link['href']
                             base = 'https://www.pro-football-reference.com'
                             url = base + str(player_link)
-                            page = requests.get(url,headers=headers, timeout=5, allow_redirects = True )
+                            page = requests.get(url,headers=headers, timeout=2, allow_redirects = True )
                             soup = bs(page.content, 'html.parser')
                             player_img = soup.find('div', {'class': 'media-item'})
                             img = player_img.find('img')
