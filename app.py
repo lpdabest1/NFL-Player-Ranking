@@ -9,7 +9,7 @@ import Receiving_Stats
 # Page Configuration
 st.set_page_config(
     page_title="NFL Position Performance Metrics",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="expanded",
 )
 
