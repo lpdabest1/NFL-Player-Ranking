@@ -1,7 +1,7 @@
-import Receiving_Stats
-import Rushing_Stats
-import Passing_Stats_Modern_Era
-import Passing_Stats_Past_Era
+import pages.Receiving_Stats as Receiving_Stats
+import pages.Rushing_Stats as Rushing_Stats
+import pages.Passing_Stats_Modern_Era as Passing_Stats_Modern_Era
+import pages.Passing_Stats_Past_Era as Passing_Stats_Past_Era
 
 import os
 import time
