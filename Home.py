@@ -32,7 +32,7 @@ st.markdown(
 """
 **Select one of the pages listed on the left sidebar to continue with this application:**
 - [Passing Stats (Modern Era)](Passing_Stats_Modern_Era)
-- [Passing Stats (Past Era)](Passing_Stats_Era)
+- [Passing Stats (Past Era)](Passing_Stats_Past_Era)
 - [Receiving Stats](Receiving_Stats)
 - [Rushing Stats](Rushing_Stats)
 """
