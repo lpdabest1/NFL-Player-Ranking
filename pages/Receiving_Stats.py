@@ -21,14 +21,14 @@ This app performs simple webscraping of NFL Football player stats data and creat
 by each team (according to the receiving category)!
 * **Python libraries:** pandas, streamlit, numpy, matplotlib, pillow, beautifulsoup4
 * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
-Data is from 1950 to 2021.
+Data is from 1950 to 2022.
 """)
 
 
 # The original selected_year variable for user selection of the year of the choosing as being of the range of 1932, current_season var
 # I am going to be test trialing to change the range of the selected_year var to 1970, current_season var
 # calculating current nfl season as most recent season available to scrape
-current_season = 2022
+current_season = 2023
 st.sidebar.header('User Customization')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1932,current_season))))
 

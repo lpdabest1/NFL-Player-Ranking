@@ -20,7 +20,7 @@ markdown = """This app performs simple webscraping of NFL Football player stats 
 by each team (according to the passing category)!
 * **Python libraries:** pandas, streamlit, numpy, matplotlib, pillow, beautifulsoup4
 * **Data source:** [pro-football-reference.com](https://www.pro-football-reference.com/).
-Data is from 2006 to 2021."""
+Data is from 2006 to 2022."""
 
 st.markdown(markdown)
 
@@ -28,12 +28,12 @@ st.markdown(markdown)
 
 
 # calculating current nfl season as most recent season available to scrape
-current_season = 2022
+current_season = 2023
 st.sidebar.header('User Customization')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(2006,current_season))))
 
 @st.cache
-def scraping_2021_QB_Stats(selected_year):
+def scraping_2022_QB_Stats(selected_year):
     players = []
 
 
@@ -196,7 +196,7 @@ def scraping_2021_QB_Stats(selected_year):
     df.to_csv("NFL_Player_QB_Search_without_image.csv")
     #print(df)
     return df
-df = scraping_2021_QB_Stats(selected_year)
+df = scraping_2022_QB_Stats(selected_year)
 
 
 st.header('Quarterback Passing Statistics')
