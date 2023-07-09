@@ -36,4 +36,5 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
         #${{ secrets.DOCKERHUB_USERNAME }}/streamlit-apps-nfl:latest
