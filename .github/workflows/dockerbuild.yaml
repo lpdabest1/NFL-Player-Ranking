@@ -35,6 +35,6 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        
+        tags: ${{ github.sha }}
+        #${{ steps.meta.outputs.tags }}
         #${{ secrets.DOCKERHUB_USERNAME }}/streamlit-apps-nfl:latest
