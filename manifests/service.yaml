@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: streamlit-app
+  name: streamlit-app
+spec:
+  ports:
+  - port: 8501
+    protocol: TCP
+    targetPort: 8501
+  selector:
+    app: streamlit-app
+  type: ClusterIP
