@@ -28,7 +28,7 @@ st.markdown(markdown)
 
 
 # calculating current nfl season as most recent season available to scrape
-current_season = 2023
+current_season = 2024
 st.sidebar.header('User Customization')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(2006,current_season))))
 
